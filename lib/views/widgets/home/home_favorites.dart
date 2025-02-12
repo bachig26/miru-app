@@ -33,7 +33,7 @@ class _HomeFavoritesState extends State<HomeFavorites> {
         title: ExtensionUtils.typeToString(widget.type),
         onClickMore: () {
           if (Platform.isAndroid) {
-            Get.to(FavoritesPage(type: widget.type));
+            Get.to(() => FavoritesPage(type: widget.type));
           } else {
             router.push(
               Uri(

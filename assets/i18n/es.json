@@ -1,4 +1,20 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
     "anime": "Anime",
     "manga": "Manga",
@@ -29,10 +45,13 @@
     "save": "Guardar",
     "save-success": "Guardado con éxito",
     "logout": "Cerrar sesión",
-    "login": "Iniciar sesión", 
+    "login": "Iniciar sesión",
     "no-data": "Sin datos",
     "clear": "Limpiar",
-    "export": "Exportar"
+    "export": "Exportar",
+    "off": "Off",
+    "error-message": "Mensaje de error",
+    "disconnect": "Desconectar"
   },
   "home": {
     "continue-watching": "Continuar",
@@ -52,7 +71,8 @@
       "url-label": "URL de la extensión",
       "tips": "Puedes importar extensiones mediante un enlace, o haciendo clic en el directorio de extensiones a continuación y colocar el archivo allí.",
       "extension-dir": "Directorio de extensiones",
-      "import-by-url": "Importar por URL"
+      "import-by-url": "Importar por URL",
+      "import-by-local": "Importación local"
     },
     "error-dialog": "Mensaje de error",
     "installed": "Instalado",
@@ -128,13 +148,23 @@
     "save-log-subtitle": "Guardar automáticamente el archivo de registros",
     "export-log": "Exportar registros",
     "export-log-subtitle": "Exportar archivo de registros",
-    "advanced": "Avanzado"
+    "advanced": "Avanzado",
+    "download": "Descargar",
+    "download-manager": "Download Manager",
+    "download-subtitle": "Configuración del gestor de descargas",
+    "download-path": "Ruta de descarga",
+    "download-path-subtitle": "Seleccionar la ruta de descarga",
+    "download-path-select": "Seleccionar",
+    "download-max-task": "Tarea máxima",
+    "download-max-task-subtitle": "Tareas máximas de descarga. Para evitar la congestión de la red, se recomienda establecer un valor razonable"
   },
   "external-player-launching": "Lanzando {player}",
   "detail": {
     "tracking": "Siguiendo",
     "favorite": "Favorito",
     "favorited": "Favorito",
+    "download": "Descargar",
+    "confirm": "Confirmar",
     "continue-watching": "Continuar {episode}",
     "total-episodes": "Total {total}",
     "overview": "Descripción general",
@@ -144,7 +174,8 @@
     "modify-tmdb-binding": "Modificar enlace a TMDB",
     "no-tmdb-data": "No hay datos de TMDB coincidentes, por favor, enlaza los datos tu mismo/a",
     "tmdb-key-missing": "Falta la clave de la API de TMDB, por favor, rellenala en los ajustes",
-    "tracker": "Siguiendo"
+    "tracker": "Siguiendo",
+    "selectAll": "Seleccione todo"
   },
   "video": {
     "episodes": "Episodios",
@@ -157,6 +188,10 @@
     "subtitle-change": "Cambiar subtítulos {title}",
     "subtitle-file": "Archivo de subtítulos",
     "torrent-downloading": "Descargando torrent",
+    "no-qualities": "No hay calidad disponible",
+    "audio": "Audio",
+    "getting-streamlink": "Obtener streamlink...",
+    "streamlink-error": "No pudo obtener el streamlink",
     "tooltip": {
       "close": "Cerrar",
       "subtitle": "Subtítulo",
@@ -170,6 +205,34 @@
       "full-screen": "Pantalla completa",
       "volume": "Volumen",
       "torrent-file-list": "Lista de archivos torrent"
+    },
+    "cast": "Cast al dispositivo",
+    "cast-device": "Jugar en {device}",
+    "sidebar": {
+      "tab": {
+        "episodes": "Episodios",
+        "qualitys": "Calidad",
+        "torrentFiles": "Archivos torrent",
+        "tracks": "Tracks",
+        "settings": "Settings"
+      },
+      "subtitle": {
+        "title": "Subtítulo",
+        "font-size": "Font tamaño",
+        "font-color": "Fuente Color",
+        "background-color": "Color de fondo",
+        "background-opacity": "Opacidad de fondo",
+        "text-align": "Texto Align",
+        "font-weight": "Fuente peso",
+        "font-weight-normal": "Normal",
+        "font-weight-bold": "Bold"
+      },
+      "play-mode": {
+        "title": "Play Mode",
+        "loop": "Loop",
+        "single": "Single",
+        "auto-next": "Auto Siguiente"
+      }
     }
   },
   "comic-settings": {
@@ -228,7 +291,7 @@
     "release-date": "Fecha de lanzamiento",
     "genres": "Géneros",
     "runtime": "Tiempo de ejecución",
-    "languages": "Idiomas"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT-Server no está instalado",
@@ -268,5 +331,21 @@
     "episodes": "Episodios",
     "manga-chapter-read": "Leído capítulo de manga: {chapters}",
     "anime-episode-watch": "Visto episodio de anime: {episodes}"
+  },
+  "download": {
+    "download-manager": "Download Manager",
+    "resume": "Resumen",
+    "pause": "Pausa",
+    "cancel": "Cancelar",
+    "downloading": "Downloading",
+    "others": "Otros",
+    "download-status": {
+      "queued": "En la cola",
+      "downloading": "Downloading",
+      "completed": "Completado",
+      "failed": "Fracaso",
+      "paused": "Pausa",
+      "canceled": "Cancelado"
+    }
   }
 }

@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_code_editor/flutter_code_editor.dart';
+import 'package:re_editor/re_editor.dart';
 import 'package:miru_app/models/extension.dart';
 import 'package:miru_app/utils/extension.dart';
 import 'package:miru_app/views/widgets/messenger.dart';
-import 'package:highlight/languages/javascript.dart';
-import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:re_highlight/languages/javascript.dart';
+import 'package:re_highlight/styles/atom-one-light.dart';
 
 class CodeEditPage extends StatefulWidget {
   const CodeEditPage({
@@ -19,9 +19,7 @@ class CodeEditPage extends StatefulWidget {
 }
 
 class _CodeEditPageState extends State<CodeEditPage> {
-  CodeController controller = CodeController(
-    language: javascript,
-  );
+  CodeLineEditingController controller = CodeLineEditingController();
 
   @override
   void initState() {
@@ -48,6 +46,7 @@ class _CodeEditPageState extends State<CodeEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.extension.name),
@@ -60,13 +59,33 @@ class _CodeEditPageState extends State<CodeEditPage> {
           ),
         ],
       ),
-      body: CodeTheme(
-        data: CodeThemeData(styles: monokaiSublimeTheme),
-        child: SingleChildScrollView(
-          child: CodeField(
-            controller: controller,
-          ),
+      body: CodeEditor(
+        style: CodeEditorStyle(
+          codeTheme: CodeHighlightTheme(languages: {
+            'javascript': CodeHighlightThemeMode(mode: langJavascript)
+          }, theme: atomOneLightTheme),
         ),
+        controller: controller,
+        wordWrap: false,
+        indicatorBuilder:
+            (context, editingController, chunkController, notifier) {
+          return Row(
+            children: [
+              DefaultCodeLineNumber(
+                controller: editingController,
+                notifier: notifier,
+              ),
+              DefaultCodeChunkIndicator(
+                width: 20,
+                controller: chunkController,
+                notifier: notifier,
+              )
+            ],
+          );
+        },
+        //findBuilder: (context, controller, readOnly) => CodeFindPanelView(controller: controller, readOnly: readOnly),
+        //toolbarController: const ContextMenuControllerImpl(),
+        sperator: Container(width: 1, color: primaryColor),
       ),
     );
   }

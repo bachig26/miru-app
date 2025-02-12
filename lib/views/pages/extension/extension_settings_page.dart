@@ -214,7 +214,7 @@ class _ExtensionSettingsPageState extends State<ExtensionSettingsPage> {
                   Expanded(
                     child: FilledButton(
                       onPressed: () {
-                        Get.to(CodeEditPage(extension: extension));
+                        Get.to(() => CodeEditPage(extension: extension));
                       },
                       child: Text('extension.edit-code'.i18n),
                     ),

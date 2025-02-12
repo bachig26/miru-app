@@ -24,21 +24,17 @@ class _DetailFavoriteButtonState extends State<DetailFavoriteButton> {
     return Obx(
       () {
         final isFavorite = c.isFavorite.value;
-        return OutlinedButton.icon(
+        return IconButton(
           icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-          label: Text(
-            isFavorite ? 'detail.favorited'.i18n : 'detail.favorite'.i18n,
-          ),
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(
-              const Size(double.infinity, 50),
+            minimumSize: WidgetStateProperty.all(
+              const Size(50, 50),
             ),
             backgroundColor: isFavorite
-                ? MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primary)
+                ? WidgetStateProperty.all(Theme.of(context).colorScheme.primary)
                 : null,
             foregroundColor: isFavorite
-                ? MaterialStateProperty.all(
+                ? WidgetStateProperty.all(
                     Theme.of(context).colorScheme.onPrimary)
                 : null,
           ),

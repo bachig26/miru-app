@@ -47,7 +47,7 @@ class ApplicationUtils {
       debugPrint('remoteVersion: $remoteVersion');
       if (packageInfo.version != remoteVersion) {
         if (Platform.isAndroid) {
-          Get.to(
+          Get.to( () =>
             Scaffold(
               appBar: AppBar(
                 title: Text(

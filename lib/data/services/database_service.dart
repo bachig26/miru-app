@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:isar/isar.dart';
+import 'package:miru_app/models/download_job.dart';
 import 'package:miru_app/models/index.dart';
 import 'package:miru_app/utils/extension.dart';
 import 'package:miru_app/utils/miru_storage.dart';
@@ -114,6 +115,28 @@ class DatabaseService {
   // 删除全部历史
   static Future<void> deleteAllHistory() async {
     return db.writeTxn(() => db.historys.where().deleteAll());
+  }
+
+  // 获取所有DownloadJob
+  static Future<List<DownloadJob>> getDownloadJobs() async {
+    return db.downloadJobs.where().findAll();
+  }
+
+  static Future<Id> putDownloadJobsById(
+      int jobId, DownloadJob downloadJob) async {
+    return db.writeTxn(() => db.downloadJobs.putByIndex('jobId', downloadJob));
+  }
+
+  // 删除DownloadJob
+  static Future<void> deleteDownloadJobById(int jobId) async {
+    return db.writeTxn(
+      () => db.downloadJobs.filter().jobIdEqualTo(jobId).deleteAll(),
+    );
+  }
+
+  // 删除全部DownloadJob
+  static Future<void> deleteAllDownloadJobs() async {
+    return db.writeTxn(() => db.downloadJobs.where().deleteAll());
   }
 
   // 扩展设置
@@ -234,6 +257,7 @@ class DatabaseService {
     ExtensionDetail extensionDetail, {
     int? tmdbID,
     String? anilistID,
+    String offlineResourceJson = '{}',
   }) {
     return db.writeTxn(
       () => db.miruDetails.putByIndex(
@@ -243,7 +267,8 @@ class DatabaseService {
           ..package = package
           ..tmdbID = tmdbID
           ..url = url
-          ..aniListID = anilistID,
+          ..aniListID = anilistID
+          ..offlineResourceJson = offlineResourceJson,
       ),
     );
   }
@@ -259,6 +284,43 @@ class DatabaseService {
         .and()
         .urlEqualTo(url)
         .findFirst();
+  }
+
+  static Future<MiruDetail?> getMiruDetailByInstance(
+    MiruDetail miruDetail,
+  ) async {
+    return await db.miruDetails
+        .filter()
+        .packageEqualTo(miruDetail.package)
+        .and()
+        .urlEqualTo(miruDetail.url)
+        .findFirst();
+  }
+
+  // 更新 MiruDetail
+  static Future<Id> updateMiruDetail(
+    String package,
+    String url,
+    MiruDetail miruDetail,
+  ) {
+    return db.writeTxn(
+      () => db.miruDetails.putByIndex(r'package&url', miruDetail),
+    );
+  }
+
+  // 获取所有 MiruDetail
+  static Future<List<MiruDetail>> getAllMiruDetail() async {
+    return db.miruDetails.where().findAll();
+  }
+
+  // 将所有 MiruDetail 的 offlineResourceJson 字段置空
+  static Future<void> clearAllMiruDetailOfflineResourceJson() async {
+    // 先获取再逐个更新
+    final miruDetails = await db.miruDetails.where().findAll();
+    for (final miruDetail in miruDetails) {
+      miruDetail.offlineResourceJson = '{}';
+      await db.writeTxn(() => db.miruDetails.put(miruDetail));
+    }
   }
 
   // 更新 TMDB 数据

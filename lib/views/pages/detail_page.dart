@@ -9,6 +9,7 @@ import 'package:miru_app/views/pages/webview_page.dart';
 import 'package:miru_app/views/widgets/detail/detail_appbar_flexible_space.dart';
 import 'package:miru_app/views/widgets/detail/detail_appbar_title.dart';
 import 'package:miru_app/views/widgets/detail/detail_background_color.dart';
+import 'package:miru_app/views/widgets/detail/detail_download_button.dart';
 import 'package:miru_app/views/widgets/detail/detail_episodes.dart';
 import 'package:miru_app/views/widgets/detail/detail_extension_tile.dart';
 import 'package:miru_app/views/widgets/detail/detail_favorite_button.dart';
@@ -110,11 +111,13 @@ class _DetailPageState extends State<DetailPage> {
                     DetailTrackingButton(
                       tag: widget.tag,
                     ),
-
+                    DetailDownloadButton(
+                      tag: widget.tag,
+                    ),
                     // webview
                     IconButton(
                       onPressed: () {
-                        Get.to(
+                        Get.to( () =>
                           WebViewPage(
                             extensionRuntime: c.runtime.value!,
                             url: c.url,
@@ -264,8 +267,8 @@ class _DetailPageState extends State<DetailPage> {
               headers: c.detail?.headers,
             ),
           ).blur(
-            begin: const Offset(10, 10),
-            end: const Offset(0, 0),
+            begin: const Offset(200, 200),
+            end: const Offset(200, 200),
           ),
           Positioned.fill(
             child: DetailBackgroundColor(controller: c.scrollController),
@@ -275,7 +278,11 @@ class _DetailPageState extends State<DetailPage> {
               return SingleChildScrollView(
                 controller: c.scrollController,
                 padding: EdgeInsets.symmetric(
-                  horizontal: constraints.maxWidth > 1200 ? 150 : 20,
+                  horizontal: constraints.maxWidth > 2000
+                      ? constraints.maxWidth / 5
+                      : constraints.maxWidth > 1200
+                          ? constraints.maxWidth / 6
+                          : 20,
                   vertical: 16,
                 ),
                 child: Column(

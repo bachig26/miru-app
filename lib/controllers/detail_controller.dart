@@ -9,6 +9,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:get/get.dart';
 import 'package:miru_app/data/providers/tmdb_provider.dart';
+import 'package:miru_app/data/services/offline_resource_service.dart';
 import 'package:miru_app/models/index.dart';
 import 'package:miru_app/views/dialogs/tmdb_binding.dart';
 import 'package:miru_app/controllers/home_controller.dart';
@@ -45,12 +46,17 @@ class DetailPageController extends GetxController {
   final RxString aniListID = ''.obs;
   final Rx<TMDBDetail?> tmdb = Rx(null);
   final Rx<ExtensionService?> runtime = Rx(null);
+  final RxBool isDownloadSelectorState = false.obs;
+  late List<List<bool>> isSelected;
+
   ExtensionType get type =>
       runtime.value?.extension.type ?? ExtensionType.bangumi;
   Extension? get extension => runtime.value?.extension;
 
   ExtensionDetail? get detail => data.value;
   set detail(ExtensionDetail? value) => data.value = value;
+
+  String offlineResourceJsonString = '{}';
 
   TMDBDetail? get tmdbDetail => tmdb.value;
   set tmdbDetail(TMDBDetail? value) => tmdb.value = value;
@@ -148,6 +154,13 @@ class DetailPageController extends GetxController {
       await getDetail();
       await getTMDBDetail();
       await getHistory();
+      isSelected = List.generate(
+        detail!.episodes!.length,
+        (index) => List.generate(
+          detail!.episodes![index].urls.length,
+          (index) => false,
+        ),
+      );
       isLoading.value = false;
     } catch (e) {
       error.value = e.toString();
@@ -169,9 +182,9 @@ class DetailPageController extends GetxController {
 
     dynamic data;
     if (Platform.isAndroid) {
-      data = await Get.to(TMDBBinding(
-        title: detail!.title,
-      ));
+      data = await Get.to(() => TMDBBinding(
+            title: detail!.title,
+          ));
     } else {
       data = await fluent.showDialog(
         context: currentContext,
@@ -193,6 +206,7 @@ class DetailPageController extends GetxController {
           jsonDecode(_miruDetail!.data),
         ),
       );
+      offlineResourceJsonString = _miruDetail!.offlineResourceJson;
       getRemoteDeatil();
     } else {
       await getRemoteDeatil();
@@ -202,13 +216,23 @@ class DetailPageController extends GetxController {
   getRemoteDeatil() async {
     try {
       detail = await runtime.value!.detail(url);
-      await DatabaseService.putMiruDetail(
-        package,
-        url,
-        detail!,
-        tmdbID: _tmdbID,
-        anilistID: aniListID.value,
-      );
+      // await DatabaseService.putMiruDetail(
+      //   package,
+      //   url,
+      //   detail!,
+      //   tmdbID: _tmdbID,
+      //   anilistID: aniListID.value,
+      //   offlineResourceJson:offlineResourceJsonString,
+      // );
+      final miruDetailToUpdate = MiruDetail()
+        ..data = jsonEncode(detail!.toJson())
+        ..package = package
+        ..tmdbID = _tmdbID
+        ..url = url
+        ..aniListID = aniListID.value
+        ..offlineResourceJson = offlineResourceJsonString;
+      _miruDetail = miruDetailToUpdate;
+      await DatabaseService.updateMiruDetail(package, url, miruDetailToUpdate);
     } catch (e) {
       // 弹出错误信息
       if (runtime.value == null) {
@@ -273,6 +297,7 @@ class DetailPageController extends GetxController {
       detail!,
       tmdbID: _tmdbID,
       anilistID: aniListID.value,
+      offlineResourceJson: offlineResourceJsonString,
     );
   }
 
@@ -282,6 +307,7 @@ class DetailPageController extends GetxController {
       url,
       detail!,
       anilistID: aniListID.value,
+      offlineResourceJson: offlineResourceJsonString,
     );
   }
 
@@ -418,11 +444,31 @@ class DetailPageController extends GetxController {
               episodeGroupId: selectEpGroup,
               detailUrl: url,
               anilistID: aniListID.value,
+              detail: _miruDetail!,
+              extensionDetail: detail!,
             ),
           );
         }),
       ),
     );
+  }
+
+  changeDownloadSelectorState() {
+    isDownloadSelectorState.value = !isDownloadSelectorState.value;
+  }
+
+  download(List<int> selected) {
+    if (type == ExtensionType.manga) {
+          OfflineResourceService.startMangaDownloadJob(
+        package, url, detail!, selectEpGroup.value, selected);
+    } else if (type == ExtensionType.bangumi) {
+      OfflineResourceService.startAnimeDownloadJob(
+        package, url, detail!, selectEpGroup.value, selected);
+    } else if (type == ExtensionType.fikushon) {
+      throw UnimplementedError();
+    } else {
+      throw 'Unknown extension type';
+    }
   }
 
   @override

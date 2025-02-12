@@ -27,23 +27,28 @@ const MiruDetailSchema = CollectionSchema(
       name: r'data',
       type: IsarType.string,
     ),
-    r'package': PropertySchema(
+    r'offlineResourceJson': PropertySchema(
       id: 2,
+      name: r'offlineResourceJson',
+      type: IsarType.string,
+    ),
+    r'package': PropertySchema(
+      id: 3,
       name: r'package',
       type: IsarType.string,
     ),
     r'tmdbID': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'tmdbID',
       type: IsarType.long,
     ),
     r'updateTime': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'updateTime',
       type: IsarType.dateTime,
     ),
     r'url': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'url',
       type: IsarType.string,
     )
@@ -94,6 +99,7 @@ int _miruDetailEstimateSize(
     }
   }
   bytesCount += 3 + object.data.length * 3;
+  bytesCount += 3 + object.offlineResourceJson.length * 3;
   bytesCount += 3 + object.package.length * 3;
   bytesCount += 3 + object.url.length * 3;
   return bytesCount;
@@ -107,10 +113,11 @@ void _miruDetailSerialize(
 ) {
   writer.writeString(offsets[0], object.aniListID);
   writer.writeString(offsets[1], object.data);
-  writer.writeString(offsets[2], object.package);
-  writer.writeLong(offsets[3], object.tmdbID);
-  writer.writeDateTime(offsets[4], object.updateTime);
-  writer.writeString(offsets[5], object.url);
+  writer.writeString(offsets[2], object.offlineResourceJson);
+  writer.writeString(offsets[3], object.package);
+  writer.writeLong(offsets[4], object.tmdbID);
+  writer.writeDateTime(offsets[5], object.updateTime);
+  writer.writeString(offsets[6], object.url);
 }
 
 MiruDetail _miruDetailDeserialize(
@@ -123,10 +130,11 @@ MiruDetail _miruDetailDeserialize(
   object.aniListID = reader.readStringOrNull(offsets[0]);
   object.data = reader.readString(offsets[1]);
   object.id = id;
-  object.package = reader.readString(offsets[2]);
-  object.tmdbID = reader.readLongOrNull(offsets[3]);
-  object.updateTime = reader.readDateTime(offsets[4]);
-  object.url = reader.readString(offsets[5]);
+  object.offlineResourceJson = reader.readString(offsets[2]);
+  object.package = reader.readString(offsets[3]);
+  object.tmdbID = reader.readLongOrNull(offsets[4]);
+  object.updateTime = reader.readDateTime(offsets[5]);
+  object.url = reader.readString(offsets[6]);
   return object;
 }
 
@@ -144,10 +152,12 @@ P _miruDetailDeserializeProp<P>(
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 5:
+      return (reader.readDateTime(offset)) as P;
+    case 6:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -670,6 +680,142 @@ extension MiruDetailQueryFilter
     });
   }
 
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'offlineResourceJson',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'offlineResourceJson',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'offlineResourceJson',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'offlineResourceJson',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition>
+      offlineResourceJsonIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'offlineResourceJson',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<MiruDetail, MiruDetail, QAfterFilterCondition> packageEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1090,6 +1236,20 @@ extension MiruDetailQuerySortBy
     });
   }
 
+  QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy>
+      sortByOfflineResourceJson() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'offlineResourceJson', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy>
+      sortByOfflineResourceJsonDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'offlineResourceJson', Sort.desc);
+    });
+  }
+
   QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy> sortByPackage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'package', Sort.asc);
@@ -1177,6 +1337,20 @@ extension MiruDetailQuerySortThenBy
     });
   }
 
+  QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy>
+      thenByOfflineResourceJson() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'offlineResourceJson', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy>
+      thenByOfflineResourceJsonDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'offlineResourceJson', Sort.desc);
+    });
+  }
+
   QueryBuilder<MiruDetail, MiruDetail, QAfterSortBy> thenByPackage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'package', Sort.asc);
@@ -1242,6 +1416,14 @@ extension MiruDetailQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MiruDetail, MiruDetail, QDistinct> distinctByOfflineResourceJson(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'offlineResourceJson',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<MiruDetail, MiruDetail, QDistinct> distinctByPackage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1286,6 +1468,13 @@ extension MiruDetailQueryProperty
   QueryBuilder<MiruDetail, String, QQueryOperations> dataProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'data');
+    });
+  }
+
+  QueryBuilder<MiruDetail, String, QQueryOperations>
+      offlineResourceJsonProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'offlineResourceJson');
     });
   }
 

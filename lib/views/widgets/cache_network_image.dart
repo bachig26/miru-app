@@ -6,13 +6,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:miru_app/utils/i18n.dart';
+import 'package:miru_app/utils/path_utils.dart';
 import 'package:miru_app/utils/request.dart';
 import 'package:miru_app/views/widgets/messenger.dart';
 import 'package:miru_app/views/widgets/platform_widget.dart';
+import 'package:saver_gallery/saver_gallery.dart';
 
-class CacheNetWorkImagePic extends StatelessWidget {
+class CacheNetWorkImagePic extends StatefulWidget {
   const CacheNetWorkImagePic(
     this.url, {
     super.key,
@@ -24,6 +25,7 @@ class CacheNetWorkImagePic extends StatelessWidget {
     this.placeholder,
     this.canFullScreen = false,
     this.mode = ExtendedImageMode.none,
+    this.useOfflineResource = false,
   });
   final String url;
   final BoxFit fit;
@@ -34,47 +36,93 @@ class CacheNetWorkImagePic extends StatelessWidget {
   final bool canFullScreen;
   final Widget? placeholder;
   final ExtendedImageMode mode;
+  final bool useOfflineResource;
 
-  _errorBuild() {
-    if (fallback != null) {
-      return fallback!;
+  @override
+  State<CacheNetWorkImagePic> createState() => _CacheNetWorkImagePicState();
+}
+
+class _CacheNetWorkImagePicState extends State<CacheNetWorkImagePic> {
+  File? file;
+  bool hasError = false;
+
+  errorBuild() {
+    if (widget.fallback != null) {
+      return widget.fallback!;
     }
     return const Center(child: Icon(fluent.FluentIcons.error));
   }
 
   @override
   Widget build(BuildContext context) {
-    final image = ExtendedImage.network(
-      url,
-      headers: headers,
-      fit: fit,
-      width: width,
-      height: height,
-      cache: true,
-      mode: mode,
-      loadStateChanged: (state) {
-        switch (state.extendedImageLoadState) {
-          case LoadState.loading:
-            return placeholder ?? const SizedBox();
-          case LoadState.completed:
-            return state.completedWidget;
-          case LoadState.failed:
-            return _errorBuild();
+    late Widget image;
+    if (!widget.useOfflineResource) {
+      image = ExtendedImage.network(
+        widget.url,
+        headers: widget.headers,
+        fit: widget.fit,
+        width: widget.width,
+        height: widget.height,
+        cache: true,
+        mode: widget.mode,
+        loadStateChanged: (state) {
+          switch (state.extendedImageLoadState) {
+            case LoadState.loading:
+              return widget.placeholder ?? const SizedBox();
+            case LoadState.completed:
+              return state.completedWidget;
+            case LoadState.failed:
+              return errorBuild();
+          }
+        },
+      );
+    } else {
+      if (hasError) {
+        image = errorBuild();
+      } else if (file == null) {
+        image = widget.placeholder ?? const SizedBox();
+        try {
+          Future.wait([miruGetFile(widget.url)]).then((value) {
+            setState(() {
+              file = value[0];
+            });
+          });
+        } catch (e) {
+          setState(() {
+            hasError = true;
+          });
         }
-      },
-    );
-
-    if (canFullScreen) {
+      } else {
+        image = ExtendedImage.file(
+          file!,
+          fit: widget.fit,
+          width: widget.width,
+          height: widget.height,
+          mode: widget.mode,
+          loadStateChanged: (state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading:
+                return widget.placeholder ?? const SizedBox();
+              case LoadState.completed:
+                return state.completedWidget;
+              case LoadState.failed:
+                return errorBuild();
+            }
+          },
+        );
+      }
+    }
+    if (widget.canFullScreen) {
       return MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () {
             final thumnailPage = _ThumnailPage(
-              url: url,
-              headers: headers,
+              url: widget.url,
+              headers: widget.headers,
             );
             if (Platform.isAndroid) {
-              Get.to(thumnailPage);
+              Get.to(() => thumnailPage);
               return;
             }
             fluent.showDialog(
@@ -86,7 +134,6 @@ class CacheNetWorkImagePic extends StatelessWidget {
         ),
       );
     }
-
     return image;
   }
 }
@@ -124,14 +171,15 @@ class _ThumnailPageState extends State<_ThumnailPage> {
       ),
     );
     if (Platform.isAndroid) {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await SaverGallery.saveImage(
         res.data,
-        name: fileName,
+        fileName: fileName,
+        skipIfExists: false,
       );
       if (mounted) {
-        final msg = result['isSuccess'] == true
+        final msg = result.isSuccess == true
             ? 'common.save-success'.i18n
-            : result['errorMessage'];
+            : result.errorMessage!;
         showPlatformSnackbar(
           context: context,
           content: msg,

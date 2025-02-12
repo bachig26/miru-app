@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miru_app/models/extension.dart';
+import 'package:miru_app/models/index.dart';
 import 'package:miru_app/views/pages/watch/reader/comic/comic_reader.dart';
 import 'package:miru_app/views/pages/watch/reader/novel/novel_reader.dart';
 import 'package:miru_app/views/pages/watch/video/video_player.dart';
@@ -15,6 +15,8 @@ class WatchPage extends StatelessWidget {
     required this.episodeGroupId,
     required this.detailUrl,
     required this.anilistID,
+    required this.detail,
+    required this.extensionDetail,
     this.cover,
   });
   final List<ExtensionEpisode> playList;
@@ -25,6 +27,8 @@ class WatchPage extends StatelessWidget {
   final int episodeGroupId;
   final String? cover;
   final String anilistID;
+  final MiruDetail detail;
+  final ExtensionDetail extensionDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,8 @@ class WatchPage extends StatelessWidget {
           episodeGroupId: episodeGroupId,
           detailUrl: detailUrl,
           anilistID: anilistID,
+          miruDetail: detail,
+          extensionDetail: extensionDetail,
         );
       case ExtensionType.manga:
         return ComicReader(
@@ -51,6 +57,8 @@ class WatchPage extends StatelessWidget {
           runtime: runtime,
           cover: cover,
           anilistID: anilistID,
+          detail: detail,
+          extensionDetail: extensionDetail,
         );
       default:
         return NovelReader(
@@ -62,6 +70,8 @@ class WatchPage extends StatelessWidget {
           detailUrl: detailUrl,
           cover: cover,
           anilistID: anilistID,
+          detail: detail,
+          extensionDetail: extensionDetail,
         );
     }
   }

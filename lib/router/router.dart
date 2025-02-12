@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:miru_app/data/providers/anilist_provider.dart';
 import 'package:miru_app/models/index.dart';
 import 'package:miru_app/views/pages/detail_page.dart';
+import 'package:miru_app/views/pages/download_manager_page.dart';
 import 'package:miru_app/views/pages/extension/extension_page.dart';
 import 'package:miru_app/views/pages/extension/extension_repo_page.dart';
 import 'package:miru_app/views/pages/extension/extension_settings_page.dart';
@@ -98,6 +99,10 @@ final router = GoRouter(
               )],
             ),
           ),
+        ),
+        GoRoute(
+          path: '/settings/download/download_manager',
+          builder: (context, state) => _animation(const DownloadManagerPage()),
         ),
         GoRoute(
           path: '/extension_repo',

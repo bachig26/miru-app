@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:get/get.dart';
-import 'package:miru_app/models/extension.dart';
+import 'package:miru_app/models/index.dart';
 import 'package:miru_app/views/pages/watch/reader/comic/comic_reader_content.dart';
 import 'package:miru_app/views/pages/watch/reader/comic/comic_reader_settings.dart';
 import 'package:miru_app/controllers/watch/comic_controller.dart';
@@ -20,6 +20,8 @@ class ComicReader extends StatefulWidget {
     required this.episodeGroupId,
     required this.runtime,
     required this.anilistID,
+    required this.detail,
+    required this.extensionDetail,
     this.cover,
   });
 
@@ -31,6 +33,8 @@ class ComicReader extends StatefulWidget {
   final ExtensionService runtime;
   final String? cover;
   final String anilistID;
+  final MiruDetail detail;
+  final ExtensionDetail extensionDetail;
 
   @override
   State<ComicReader> createState() => _ComicReaderState();
@@ -49,6 +53,8 @@ class _ComicReaderState extends State<ComicReader> {
         runtime: widget.runtime,
         cover: widget.cover,
         anilistID: widget.anilistID,
+        miruDetail: widget.detail,
+        extensionDetail: widget.extensionDetail,
       ),
       tag: widget.title,
     );

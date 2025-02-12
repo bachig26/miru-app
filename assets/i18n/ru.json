@@ -1,4 +1,20 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
     "anime": "Аниме",
     "manga": "Манга",
@@ -25,7 +41,7 @@
     "previous": "Предыдущее",
     "show-all": "Показать всё",
     "delete": "Удалить",
-    "delete-all": "Удалить всё"
+    "delete-all": "Удалить всё",
     "save": "Сохранить",
     "save-success": "Сохранение прошло успешно",
     "logout": "Выйти",
@@ -41,7 +57,7 @@
     "continue-watching": "Продолжить",
     "favorite": "Избранное",
     "no-record": "Нет избранного или просмотра записей",
-    "watched": "Просмотрен {ep}"
+    "watched": "Просмотрен {ep}",
     "favorite-all": "Все {type} избранные"
   },
   "search": {
@@ -132,12 +148,23 @@
     "save-log-subtitle": "Автоматическое сохранение файла журнала",
     "export-log": "Экспортировать журнал",
     "export-log-subtitle": "Экспорт файла журнала",
-    "advanced": "Расширенные"
+    "advanced": "Расширенные",
+    "download": "Скачать",
+    "download-manager": "Диспетчер загрузки",
+    "download-subtitle": "Настройки диспетчера загрузок",
+    "download-path": "Путь загрузки",
+    "download-path-subtitle": "Выберите путь загрузки",
+    "download-path-select": "Выбрать",
+    "download-max-task": "Максимальное количество задач",
+    "download-max-task-subtitle": "Максимальное количество задач загрузки. Чтобы избежать перегрузки сети, рекомендуется установить разумное значение"
   },
   "external-player-launching": "Запуск {player}",
   "detail": {
+    "tracking": "Отслеживание",
     "favorite": "Избранное",
     "favorited": "В избранных",
+    "download": "Скачать",
+    "confirm": "Подтвердить",
     "continue-watching": "Продолжить {episode}",
     "total-episodes": "Всего {total}",
     "overview": "Обзор",
@@ -146,7 +173,9 @@
     "get-lastest-data-error": "Не удалось получить последние данные",
     "modify-tmdb-binding": "Изменить привязку TMDB",
     "no-tmdb-data": "Данные TMDB не совпадают, привяжите данные самостоятельно",
-    "tmdb-key-missing": "Ключ API TMDB отсутствует, заполните настройки"
+    "tmdb-key-missing": "Ключ API TMDB отсутствует, заполните настройки",
+    "tracker": "Отслеживание",
+    "selectAll": "Выберите все"
   },
   "video": {
     "episodes": "Эпизоды",
@@ -159,6 +188,10 @@
     "subtitle-change": "Редактировать субтитры {title}",
     "subtitle-file": "Файл субтитров",
     "torrent-downloading": "Торрент-скачивание",
+    "no-qualities": "Качество отсутствует",
+    "audio": "Аудио",
+    "getting-streamlink": "Получение streamlink...",
+    "streamlink-error": "Не удалось получить streamlink",
     "tooltip": {
       "close": "Закрыть",
       "subtitle": "Субтитры",
@@ -258,7 +291,7 @@
     "release-date": "Дата выпуска",
     "genres": "Жанры",
     "runtime": "Время выполнения",
-    "languages": "Языки"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT-сервер не установлен",
@@ -298,5 +331,21 @@
     "episodes": "Эпизоды",
     "manga-chapter-read": "Прочитано глав манги: {chapters}",
     "anime-episode-watch": "Просмотрено аниме-эпизодов: {episodes}"
+  },
+  "download": {
+    "download-manager": "Диспетчер загрузки",
+    "resume": "Резюме",
+    "pause": "Пауза",
+    "cancel": "Отменить",
+    "downloading": "Скачать",
+    "others": "Другие",
+    "download-status": {
+      "queued": "В очереди",
+      "downloading": "Скачать",
+      "completed": "Завершено",
+      "failed": "Не удалось",
+      "paused": "Пауза",
+      "canceled": "Отменено"
+    }
   }
 }

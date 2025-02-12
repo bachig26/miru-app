@@ -4,7 +4,7 @@ part 'extension.g.dart';
 
 enum ExtensionType { manga, bangumi, fikushon }
 
-enum ExtensionWatchBangumiType { hls, mp4, torrent }
+enum ExtensionWatchBangumiType { hls, mp4, torrent, local }
 
 enum ExtensionLogLevel {
   info,

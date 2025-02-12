@@ -126,12 +126,21 @@
     "save-log-subtitle": "Automatyczne zapisywanie pliku logów",
     "export-log": "Wyeksportuj logi",
     "export-log-subtitle": "Wyeksportuj logi do pliku",
-    "advanced": "Zaawansowane"
+    "advanced": "Zaawansowane",
+    "download": "Pobierz",
+    "download-subtitle": "Ustawienia menedżera pobierania",
+    "download-path": "Ścieżka pobierania",
+    "download-path-subtitle": "Wybierz ścieżkę pobierania",
+    "download-path-select": "Wybierz",
+    "download-max-task": "Maksymalna liczba zadań",
+    "download-max-task-subtitle": "Maksymalna liczba zadań pobierania. Aby uniknąć przeciążenia sieci, zaleca się ustawienie rozsądnej wartości"
   },
   "external-player-launching": "Uruchamianie {player}",
   "detail": {
     "favorite": "Ulubione",
     "favorited": "W ulubionych",
+    "download": "Pobierz",
+    "confirm": "Potwierdź",
     "continue-watching": "Kontynuuj: {episode}",
     "total-episodes": "Wszystkich: {total}",
     "overview": "Opis",

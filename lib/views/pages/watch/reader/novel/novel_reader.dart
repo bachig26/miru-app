@@ -17,6 +17,8 @@ class NovelReader extends StatefulWidget {
     required this.title,
     required this.detailUrl,
     required this.anilistID,
+    required this.detail,
+    required this.extensionDetail,
     this.cover,
   });
 
@@ -28,6 +30,8 @@ class NovelReader extends StatefulWidget {
   final ExtensionService runtime;
   final String? cover;
   final String anilistID;
+  final MiruDetail detail;
+  final ExtensionDetail extensionDetail;
 
   @override
   State<NovelReader> createState() => _NovelReaderState();
@@ -46,6 +50,8 @@ class _NovelReaderState extends State<NovelReader> {
         runtime: widget.runtime,
         cover: widget.cover,
         anilistID: widget.anilistID,
+        miruDetail: widget.detail,
+        extensionDetail: widget.extensionDetail,
       ),
       tag: widget.title,
     );

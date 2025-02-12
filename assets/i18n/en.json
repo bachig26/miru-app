@@ -148,13 +148,23 @@
     "save-log-subtitle": "Auto save log file",
     "export-log": "Export Log",
     "export-log-subtitle": "Export log file",
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "download": "Download",
+    "download-manager": "Download Manager",
+    "download-subtitle": "Download Manager settings",
+    "download-path": "Download Path",
+    "download-path-subtitle": "Select the download path",
+    "download-path-select": "Select",
+    "download-max-task": "Max Task",
+    "download-max-task-subtitle": "Max download tasks. To avoid network congestion, it is recommended to set a reasonable value"
   },
   "external-player-launching": "Launching {player}",
   "detail": {
     "tracking": "Tracking",
     "favorite": "Favorite",
     "favorited": "Favorited",
+    "download": "Download",
+    "confirm": "Confirm",
     "continue-watching": "Continue {episode}",
     "total-episodes": "Total {total}",
     "overview": "Overview",
@@ -164,7 +174,8 @@
     "modify-tmdb-binding": "Modify TMDB Binding",
     "no-tmdb-data": "No TMDB data matched, please bind the data yourself",
     "tmdb-key-missing": "TMDB API Key missing, please fill in the settings",
-    "tracker": "Tracking"
+    "tracker": "Tracking",
+    "selectAll": "Select All"
   },
   "video": {
     "episodes": "Episodes",
@@ -320,5 +331,21 @@
     "episodes": "Episodes",
     "manga-chapter-read": "Manga Chapter Read: {chapters}",
     "anime-episode-watch": "Anime Episode Watched: {episodes}"
+  },
+  "download": {
+    "download-manager": "Download Manager",
+    "resume": "Resume",
+    "pause": "Pause",
+    "cancel": "Cancel",
+    "downloading": "Downloading",
+    "others": "Others",
+    "download-status": {
+      "queued": "In Queue",
+      "downloading": "Downloading",
+      "completed": "Completed",
+      "failed": "Failed",
+      "paused": "Paused",
+      "canceled": "Canceled"
+    }
   }
 }

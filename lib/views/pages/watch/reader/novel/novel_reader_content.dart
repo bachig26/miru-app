@@ -70,21 +70,22 @@ class _NovelReaderContentState extends State<NovelReaderContent> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Text(
-                      _c.title + _c.playList[_c.playIndex].name,
+                      _c.playList[_c.index.value].name,
                       style: const TextStyle(fontSize: 26),
                     ),
                   );
                 }
                 if (index == 1) {
-                  return (watchData.subtitle != null)
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Text(
-                            watchData.subtitle!,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        )
-                      : const SizedBox();
+                  return const SizedBox();
+                  // return (watchData.subtitle != null)
+                  //     ? Padding(
+                  //         padding: const EdgeInsets.only(bottom: 20),
+                  //         child: Text(
+                  //           watchData.subtitle!,
+                  //           style: const TextStyle(fontSize: 20),
+                  //         ),
+                  //       )
+                  //     : const SizedBox();
                 }
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20),

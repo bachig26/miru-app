@@ -42,7 +42,7 @@ class _ExtensionTileState extends State<ExtensionTile> {
         style: const TextStyle(fontSize: 12),
       ),
       onTap: () {
-        Get.to(ExtensionSettingsPage(package: widget.extension.package));
+        Get.to(() => ExtensionSettingsPage(package: widget.extension.package));
       },
       trailing: IconButton(
         onPressed: () {
@@ -58,7 +58,7 @@ class _ExtensionTileState extends State<ExtensionTile> {
                     title: Text('extension.edit-code'.i18n),
                     onTap: () async {
                       Get.back();
-                      Get.to(CodeEditPage(extension: widget.extension));
+                      Get.to(() => CodeEditPage(extension: widget.extension));
                     },
                   ),
                   ListTile(

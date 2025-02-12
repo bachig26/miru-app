@@ -49,7 +49,7 @@ class _VideoPlayerSidebarState extends State<VideoPlayerSidebar> {
 
   Widget _buildAndroid(BuildContext context) {
     return Container(
-      color: ThemeData.dark().colorScheme.background,
+      color: ThemeData.dark().colorScheme.surface,
       child: DefaultTabController(
         length: _tabs.length,
         initialIndex: !_tabs.keys.toList().contains(_c.initSidebarTab.value)

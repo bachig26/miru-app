@@ -1,5 +1,23 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
+    "anime": "Anime",
+    "manga": "Manga",
     "home": "Accueil",
     "search": "Recherche",
     "extension": "Extensions",
@@ -23,14 +41,24 @@
     "previous": "Précédent",
     "show-all": "Tout afficher",
     "delete": "Supprimer",
-    "delete-all": "Supprimer tout"
+    "delete-all": "Supprimer tout",
+    "save": "Save",
+    "save-success": "Save Success",
+    "logout": "Logout",
+    "login": "Login",
+    "no-data": "Aucune donnée",
+    "clear": "Clear",
+    "export": "Exportation",
+    "off": "Off",
+    "error-message": "Message d'erreur",
+    "disconnect": "Déconnexion"
   },
   "home": {
     "continue-watching": "Reprendre",
     "favorite": "Favoris",
-    "favorite-all": "Tous {type} favoris",
     "no-record": "Pas de favoris ou de visionnage en cours",
-    "watched": "Regardé {ep}"
+    "watched": "Regardé {ep}",
+    "favorite-all": "Tous {type} favoris"
   },
   "search": {
     "hint-text": "Utilisez la recherche à bon escient!~",
@@ -43,7 +71,8 @@
       "url-label": "Extension URL",
       "tips": "Tu peux importer des extensions avec un lien,ou un clic sur le Dépôt d'Extensions ci-dessous et y placer le fichier d'extension.",
       "extension-dir": "Dépôt d'Extensions",
-      "import-by-url": "Importer avec un URL"
+      "import-by-url": "Importer avec un URL",
+      "import-by-local": "Importation locale"
     },
     "error-dialog": "Message d'Erreur",
     "installed": "Installé",
@@ -56,11 +85,21 @@
     "upgrade": "Mettre à jour"
   },
   "settings": {
+    "general": "Général",
+    "general-subtitle": "TMDB, Langage, Thème, Mise à jour...",
     "extension": "Extensions",
     "extension-subtitle": "Dépôt d'Extensions",
+    "video-player": "Lecteur Vidéo",
+    "video-player-subtitle": "Serveur BT, Lecteur Externe...",
+    "comic-reader": "Lecteur de Bande Dessinée",
+    "comic-reader-subtitle": "Mode de lecture par défaut...",
+    "tracking": "Suivi",
+    "tracking-subtitle": "AniList...",
+    "auto-tracking": "Auto Tracking",
+    "auto-tracking-subtitle": "Synchroniser automatiquement les progrès lorsque vous avez terminé de regarder / lire",
+    "about": "À propos",
     "links": "Liens",
     "contributors": "Contributeurs",
-    "default-reader-mode": "Mode de lecture par défaut",
     "repo-url": "URL du Dépôt d'Extensions",
     "repo-url-subtitle": "Obtenir l'URL du Dépôt d'Extensions",
     "tmdb-key": "Clé API TMDB",
@@ -69,14 +108,6 @@
     "bt-server-subtitle": "Le serveur BT est un composant nécessaire à la lecture en ligne des torrents.",
     "bt-server-manager": "Gérer",
     "upgrade": "Mise à jour de l'application",
-    "comic-reader": "Lecteur de Bande Dessinée",
-    "comic-reader-subtitle": "Mode de lecture par défaut...",
-    "tracking": "Suivi",
-    "tracking-subtitle": "AniList...",
-    "general": "Général",
-    "general-subtitle": "TMDB, Langage, Thème, Mise à jour...",
-    "skip-interval": "Intervalle de Saut",
-    "skip-interval-subtitle": "Intervalle de Saut pour le lecteur vidéo intégré",
     "upgrade-subtitle": "version: {version}",
     "upgrade-training": "Vérifier",
     "auto-check-update": "Vérifier automatiquement les mises à jour",
@@ -90,28 +121,50 @@
     "theme-black": "Nuit",
     "nsfw": "NSFW",
     "nsfw-subtitle": "Afficher le contenu NSFW",
-    "video-player": "Lecteur Vidéo",
-    "video-player-subtitle": "Serveur BT, Lecteur Externe...",
-    "network-ua": "Webview User-Agent",
-    "network-ua-subtitle": "Modifier le User-Agent dans l'en-tête de la requête pour les Webviews et les extensions.",
     "external-player": "Lecteur vidéo préféré",
     "external-player-subtitle": "Actuellement, le lecteur préféré est {player}",
     "external-player-builtin": "Intégré",
     "language-subtitle": "Changer le langage de l'application",
     "extension-log": "Fenêtre du journal d'extension",
     "extension-log-subtitle": "Utilisé pour le débogage des extensions",
-    "about": "À propos",
-    "official-site": "Site Officiel",
-    "official-site-training": "Visiter",
-    "source-code": "Open Source",
-    "source-code-training": "Donner une Etoile",
-    "license": "Licence",
-    "license-subtitle": "Licence"
+    "skip-interval": "Intervalle de Saut",
+    "skip-interval-subtitle": "Intervalle de Saut pour le lecteur vidéo intégré",
+    "default-reader-mode": "Mode de lecture par défaut",
+    "network": "Réseau",
+    "network-subtitle": "Proxy, agent utilisateur.",
+    "network-ua": "Webview User-Agent",
+    "network-ua-subtitle": "Modifier le User-Agent dans l'en-tête de la requête pour les Webviews et les extensions.",
+    "proxy-type": "Type de proxy",
+    "proxy-type-subtitle": "Type de proxy pour les requêtes",
+    "proxy-type-direct": "Directement",
+    "proxy-type-socks4": "Chaussettes4",
+    "proxy-type-socks5": "Chaussettes5",
+    "proxy-type-http": "HTTP",
+    "proxy": "Proxy",
+    "proxy-subtitle": "Adresse de proxy (par exemple : username : password@host : port)",
+    "log": "Log",
+    "log-subtitle": "Sauvegarder le log, exporter le log...",
+    "save-log": "Save Log",
+    "save-log-subtitle": "Auto save log fichier",
+    "export-log": "Exportation Log",
+    "export-log-subtitle": "Fichier log d'exportation",
+    "advanced": "Avancé",
+    "download": "Download",
+    "download-manager": "Download Manager",
+    "download-subtitle": "Download Manager Settings",
+    "download-path": "Download Path",
+    "download-path-subtitle": "Sélectionnez le chemin de téléchargement",
+    "download-path-select": "Sélectionnez",
+    "download-max-task": "Max tâche",
+    "download-max-task-subtitle": "Télécharger les tâches max. Pour éviter la congestion du réseau, il est recommandé de définir une valeur raisonnable."
   },
   "external-player-launching": "Lancement du {player}",
   "detail": {
+    "tracking": "Tracking",
     "favorite": "Favoris",
     "favorited": "Favorisé",
+    "download": "Download",
+    "confirm": "Confirmer",
     "continue-watching": "Continuer {episode}",
     "total-episodes": "Total {total}",
     "overview": "Aperçu",
@@ -120,7 +173,9 @@
     "get-lastest-data-error": "Échec de l'obtention des dernières données",
     "modify-tmdb-binding": "Modifier la liaison BDMT",
     "no-tmdb-data": "Aucune donnée TMDB ne correspond, veuillez lier les données vous-même.",
-    "tmdb-key-missing": "Clé API TMDB manquante, veuillez compléter les paramètres"
+    "tmdb-key-missing": "Clé API TMDB manquante, veuillez compléter les paramètres",
+    "tracker": "Tracking",
+    "selectAll": "Sélectionnez tous"
   },
   "video": {
     "episodes": "Episodes",
@@ -133,19 +188,51 @@
     "subtitle-change": "Changer le sous-titre {title}",
     "subtitle-file": "Fichier Sous-titre",
     "torrent-downloading": "Téléchargement du torrent",
+    "no-qualities": "Aucune qualité disponible",
+    "audio": "Audio",
+    "getting-streamlink": "Découvrez Streamlink...",
+    "streamlink-error": "Impossible d'obtenir le streamlink",
     "tooltip": {
       "close": "Fermer",
-      "full-screen": "Plein écran",
-      "next": "Suivant",
-      "play": "Lecture",
+      "subtitle": "Sous-titre",
       "play-list": "Liste de lecture",
-      "play-or-pause": "Pause",
-      "previous": "Précédent",
       "quality": "Qualité",
       "speed": "Vitesse",
-      "subtitle": "Sous-titre",
-      "torrent-file-list": "Liste des fichiers torrent",
-      "volume": "Volume"
+      "play": "Lecture",
+      "play-or-pause": "Pause",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "full-screen": "Plein écran",
+      "volume": "Volume",
+      "torrent-file-list": "Liste des fichiers torrent"
+    },
+    "cast": "Cast à Device",
+    "cast-device": "Jouer sur {device}",
+    "sidebar": {
+      "tab": {
+        "episodes": "Épisodes",
+        "qualitys": "Qualitys",
+        "torrentFiles": "Fichiers torrent",
+        "tracks": "Les tracks",
+        "settings": "Settings"
+      },
+      "subtitle": {
+        "title": "Sous-titre",
+        "font-size": "Font taille",
+        "font-color": "Font couleur",
+        "background-color": "Couleur de fond",
+        "background-opacity": "Opacité de fond",
+        "text-align": "Textes alignés",
+        "font-weight": "Font poids",
+        "font-weight-normal": "Normal",
+        "font-weight-bold": "Bold"
+      },
+      "play-mode": {
+        "title": "Play mode",
+        "loop": "Loop",
+        "single": "Single",
+        "auto-next": "Auto Next"
+      }
     }
   },
   "comic-settings": {
@@ -156,6 +243,11 @@
   },
   "novel-settings": {
     "font-size": "Taille de la police"
+  },
+  "bugreport": {
+    "auto-remove-subtitle": "Supprimer en ~ jours",
+    "show-report-dialog": "Afficher le rapport Dialogue",
+    "show-report-dialog-subtitle": "Afficher la boîte de dialogue de rapport d'erreur lorsque l'application démarre"
   },
   "reader": {
     "chapters": "Chapitres",
@@ -199,7 +291,7 @@
     "release-date": "Date de sortie",
     "genres": "Genres",
     "runtime": "Temps d'exécution",
-    "languages": "Langages"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT-Server n'est pas installé",
@@ -210,5 +302,50 @@
     "stop": "Arrêter",
     "upgrade": "Mettre à jour",
     "start": "Démarrer"
+  },
+  "report": {
+    "copied": "Copié sur clipboard",
+    "github-bug-report": "Rapport sur le problème GitHub",
+    "title": "Rapport de bug",
+    "copy-message": "Copier le message d'erreur",
+    "show-report-checkbox": "Afficher la boîte de dialogue de rapport lorsque l'application démarre"
+  },
+  "anilist": {
+    "title": "Suivi AniList",
+    "login-hint-1": "On dirait que vous n'êtes pas encore connecté à AniList",
+    "login-hint-2": "Veuillez vous connecter à AniList d'abord",
+    "status": "Statut",
+    "score": "Score",
+    "watching": "Watching",
+    "reading": "Lecture",
+    "completed": "Completé",
+    "paused": "Pause",
+    "dropped": "Dropé",
+    "planning": "Planification",
+    "hold-on": "Hold on",
+    "re-watching": "Re-observation",
+    "re-reading": "Ré - lecture",
+    "start-date": "Date de début",
+    "end-date": "Date de fin",
+    "unbind": "Unbind",
+    "episodes": "Épisodes",
+    "manga-chapter-read": "Chapitre Manga Lire : {chapters}",
+    "anime-episode-watch": "Épisode anime regardé : {episodes}"
+  },
+  "download": {
+    "download-manager": "Download Manager",
+    "resume": "résumé",
+    "pause": "Pause",
+    "cancel": "Annuler",
+    "downloading": "Downloading",
+    "others": "Autres",
+    "download-status": {
+      "queued": "dans queue",
+      "downloading": "Downloading",
+      "completed": "Completé",
+      "failed": "Échec",
+      "paused": "Pause",
+      "canceled": "Annulé"
+    }
   }
 }

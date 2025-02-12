@@ -36,7 +36,7 @@ class _DetailTrackingButtonState extends State<DetailTrackingButton> {
     if (c.aniListID.value.isEmpty) {
       dynamic data;
       if (Platform.isAndroid) {
-        data = await Get.to(
+        data = await Get.to( () =>
           AnilistBindingDialog(
             title: c.detail!.title,
             type: anilistType,

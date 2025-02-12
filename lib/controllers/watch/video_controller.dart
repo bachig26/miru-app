@@ -46,6 +46,8 @@ class VideoPlayerController extends GetxController {
   final int episodeGroupId;
   final ExtensionService runtime;
   final String anilistID;
+  final MiruDetail miruDetail; // 里面存储了离线资源的信息
+  final ExtensionDetail extensionDetail; // 里面存储了漫画章节信息
 
   VideoPlayerController({
     required this.title,
@@ -55,6 +57,8 @@ class VideoPlayerController extends GetxController {
     required this.episodeGroupId,
     required this.runtime,
     required this.anilistID,
+    required this.miruDetail,
+    required this.extensionDetail,
   });
 
   // 播放器
@@ -390,13 +394,50 @@ class VideoPlayerController extends GetxController {
     player.stop();
     isGettingWatchData.value = true;
     try {
-      await getWatchData();
+      final newMiruDetail =
+          await DatabaseService.getMiruDetailByInstance(miruDetail);
+      final epTitle = extensionDetail.episodes?[episodeGroupId].title;
+      final itemTitle =
+          extensionDetail.episodes?[episodeGroupId].urls[index.value].name;
+      if (itemTitle != playList[index.value].name) {
+        logger.warning('itemTitle != playList[index.value].name');
+      }
+      assert(itemTitle == playList[index.value].name);
+      logger.info(
+          'VideoPlayerController: getContent: $epTitle - $itemTitle, offline: ${newMiruDetail!.offlineResource}');
+      error.value = '';
+      watchData = null;
+      if (newMiruDetail.offlineResource[epTitle]?[itemTitle] == null) {
+        throw 'Use Online Data';
+      }
+      final itemPath = newMiruDetail.offlineResource[epTitle]![itemTitle]!;
+      logger.info('video play itemPath: $itemPath');
+      late String uri;
+      if (Platform.isAndroid) {
+        uri = itemPath;
+      } else {
+        uri = Uri.file(itemPath).toString();
+      }
+      logger.info('uri: $uri');
+      // 构造watchData
+      ExtensionBangumiWatch offlineWatchData = ExtensionBangumiWatch(
+        type: ExtensionWatchBangumiType.local,
+        url: uri,
+        headers: {},
+        subtitles: [],
+      );
+      watchData = offlineWatchData;
     } catch (e) {
-      logger.severe(e);
-      error.value = e.toString();
-      return;
+      logger.info('Video Player Controller offline resource error: $e');
+      try {
+        await getWatchData();
+      } catch (e) {
+        logger.severe(e);
+        error.value = e.toString();
+        return;
+      }
     }
-
+    logger.info('type: ${watchData!.type}');
     try {
       if (watchData!.type == ExtensionWatchBangumiType.torrent) {
         try {
@@ -408,6 +449,11 @@ class VideoPlayerController extends GetxController {
         }
 
         playTorrentFile(torrentMediaFileList.first);
+      } else if (watchData!.type == ExtensionWatchBangumiType.local) {
+        // 目前没有考虑到音轨与视频轨分离的情况
+        await player.open(
+          Media(watchData!.url),
+        );
       } else {
         if (dlnaDevice.value != null) {
           await dlnaDevice.value!.setUrl(watchData!.url);
@@ -514,7 +560,6 @@ class VideoPlayerController extends GetxController {
   getQuality() async {
     final url = watchData!.url;
     final headers = watchData!.headers;
-    logger.info(url);
     final response = await dio.get(
       url,
       options: Options(
@@ -568,6 +613,7 @@ class VideoPlayerController extends GetxController {
     }
 
     if (playlist is HlsMasterPlaylist) {
+      logger.info('is master playlist');
       final urlList = playlist.mediaPlaylistUrls
           .map(
             (e) => e.toString(),

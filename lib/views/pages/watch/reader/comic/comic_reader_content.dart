@@ -56,10 +56,15 @@ class _ComicReaderContentState extends State<ComicReaderContent> {
             color: Colors.black.withAlpha(200),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
             child: Obx(
-              () => Text(
-                "${_c.currentPage.value + 1}/${_c.watchData.value?.urls.length ?? 0}",
-                style: const TextStyle(color: Colors.white, fontSize: 15),
-              ),
+              () {
+                final totalLength = _c.useOfflineData.value
+                    ? _c.offlineWatchData.value.length
+                    : _c.watchData.value?.urls.length ?? 0;
+                return Text(
+                  "${_c.currentPage.value + 1}/$totalLength",
+                  style: const TextStyle(color: Colors.white, fontSize: 15),
+                );
+              },
             ),
           ),
         ),
@@ -70,125 +75,146 @@ class _ComicReaderContentState extends State<ComicReaderContent> {
   _buildContent() {
     late Color backgroundColor;
     if (Platform.isAndroid) {
-      backgroundColor = Theme.of(context).colorScheme.background;
+      backgroundColor = Theme.of(context).colorScheme.surface;
     } else {
       backgroundColor = fluent.FluentTheme.of(context).micaBackgroundColor;
     }
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      autofocus: true,
-      onKey: _c.onKey,
-      child: Container(
-        color: backgroundColor,
-        width: double.infinity,
-        child: LayoutBuilder(
-          builder: ((context, constraints) {
-            final maxWidth = constraints.maxWidth;
-            return Obx(() {
-              if (_c.error.value.isNotEmpty) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(_c.error.value),
-                    PlatformButton(
-                      child: Text('common.retry'.i18n),
-                      onPressed: () {
-                        _c.getContent();
-                      },
-                    )
-                  ],
-                );
-              }
-
-              // 加载中
-              if (_c.watchData.value == null) {
-                return const Center(child: ProgressRing());
-              }
-
-              final viewPadding = maxWidth > 800 ? ((maxWidth - 800) / 2) : 0.0;
-              final images = _c.watchData.value!.urls;
-              final readerType = _c.readType.value;
-              final cuurentPage = _c.currentPage.value;
-
-              if (readerType == MangaReadMode.webTonn) {
-                final width = MediaQuery.of(context).size.width;
-                final height = MediaQuery.of(context).size.height;
-                return SizedBox(
-                  width: width,
-                  height: height,
-                  child: Listener(
-                    onPointerDown: (event) {
-                      _pointer.add(event.pointer);
-                      if (_pointer.length == 2) {
-                        _c.isZoom.value = true;
-                      }
-                    },
-                    onPointerUp: (event) {
-                      _pointer.remove(event.pointer);
-                      if (_pointer.length == 1) {
-                        _c.isZoom.value = false;
-                      }
-                    },
-                    child: InteractiveViewer(
-                      scaleEnabled: _c.isZoom.value,
-                      child: ScrollablePositionedList.builder(
-                        physics: _c.isZoom.value
-                            ? const NeverScrollableScrollPhysics()
-                            : null,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: viewPadding,
-                        ),
-                        initialScrollIndex: cuurentPage,
-                        itemScrollController: _c.itemScrollController,
-                        itemPositionsListener: _c.itemPositionsListener,
-                        scrollOffsetController: _c.scrollOffsetController,
-                        itemBuilder: (context, index) {
-                          final url = images[index];
-                          return CacheNetWorkImagePic(
-                            url,
-                            fit: BoxFit.fitWidth,
-                            placeholder: _buildPlaceholder(context),
-                            headers: _c.watchData.value?.headers,
-                          );
+    return Obx(() {
+      final readerType = _c.readType.value;
+      final currentPage = _c.currentPage.value;
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        autofocus: true,
+        onKeyEvent: (value) => _c.onKey(value),
+        child: Container(
+          color: backgroundColor,
+          width: double.infinity,
+          child: LayoutBuilder(
+            builder: ((context, constraints) {
+              final maxWidth = constraints.maxWidth;
+              return Obx(() {
+                if (_c.error.value.isNotEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(_c.error.value),
+                      PlatformButton(
+                        child: Text('common.retry'.i18n),
+                        onPressed: () {
+                          _c.getContent();
                         },
-                        itemCount: images.length,
+                      )
+                    ],
+                  );
+                }
+
+                // 加载中
+                if (_c.watchData.value == null && !_c.useOfflineData.value) {
+                  return const Center(child: ProgressRing());
+                } else if (_c.offlineWatchData.value.isEmpty &&
+                    _c.useOfflineData.value) {
+                  return const Center(child: ProgressRing());
+                }
+
+                final viewPadding =
+                    maxWidth > 800 ? ((maxWidth - 800) / 2) : 0.0;
+                final images = _c.useOfflineData.value
+                    ? _c.offlineWatchData.value
+                    : _c.watchData.value!.urls;
+
+                if (readerType == MangaReadMode.webTonn) {
+                  final width = MediaQuery.of(context).size.width;
+                  final height = MediaQuery.of(context).size.height;
+                  return SizedBox(
+                    width: width,
+                    height: height,
+                    child: Listener(
+                      onPointerDown: (event) {
+                        _pointer.add(event.pointer);
+                        if (_pointer.length == 2) {
+                          _c.isZoom.value = true;
+                        }
+                      },
+                      onPointerUp: (event) {
+                        _pointer.remove(event.pointer);
+                        if (_pointer.length == 1) {
+                          _c.isZoom.value = false;
+                        }
+                      },
+                      child: InteractiveViewer(
+                        scaleEnabled: _c.isZoom.value,
+                        child: ScrollablePositionedList.builder(
+                          physics: _c.isZoom.value
+                              ? const NeverScrollableScrollPhysics()
+                              : null,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: viewPadding,
+                          ),
+                          initialScrollIndex: currentPage,
+                          itemScrollController: _c.itemScrollController,
+                          itemPositionsListener: _c.itemPositionsListener,
+                          scrollOffsetController: _c.scrollOffsetController,
+                          itemBuilder: (context, index) {
+                            final url = images[index];
+                            return CacheNetWorkImagePic(
+                              url,
+                              fit: BoxFit.fitWidth,
+                              placeholder: _buildPlaceholder(context),
+                              headers: _c.watchData.value?.headers,
+                              useOfflineResource: _c.useOfflineData.value,
+                            );
+                          },
+                          itemCount: images.length,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-
-              //common mode and left to right mode
-              return ExtendedImageGesturePageView.builder(
-                itemCount: images.length,
-                reverse: readerType == MangaReadMode.rightToLeft,
-                onPageChanged: (index) {
-                  _c.currentPage.value = index;
-                },
-                scrollDirection: Axis.horizontal,
-                controller: _c.pageController.value,
-                itemBuilder: (BuildContext context, int index) {
-                  final url = images[index];
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: viewPadding,
-                    ),
-                    child: CacheNetWorkImagePic(
-                      url,
-                      mode: ExtendedImageMode.gesture,
-                      key: ValueKey(url),
-                      fit: BoxFit.contain,
-                      placeholder: _buildPlaceholder(context),
-                      headers: _c.watchData.value?.headers,
-                    ),
                   );
-                },
-              );
-            });
-          }),
+                }
+
+                //common mode and left to right mode
+                return ExtendedImageGesturePageView.builder(
+                  itemCount: images.length,
+                  reverse: readerType == MangaReadMode.rightToLeft,
+                  onPageChanged: (index) {
+                    _c.currentPage.value = index;
+                  },
+                  scrollDirection: Axis.horizontal,
+                  controller: _c.pageController.value,
+                  itemBuilder: (BuildContext context, int index) {
+                    final url = images[index];
+                    if (index < images.length - 1 && !_c.useOfflineData.value) {
+                      // 预加载后面一页的图片
+                      precacheImage(
+                        ExtendedNetworkImageProvider(
+                          images[index + 1],
+                          headers: _c.watchData.value?.headers,
+                          cache: true,
+                        ),
+                        context,
+                      );
+                    }
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: viewPadding,
+                      ),
+                      child: CacheNetWorkImagePic(
+                        url,
+                        mode: ExtendedImageMode.gesture,
+                        key: ValueKey(url),
+                        fit: BoxFit.contain,
+                        placeholder: _buildPlaceholder(context),
+                        headers: _c.watchData.value?.headers,
+                        useOfflineResource: _c.useOfflineData.value,
+                      ),
+                    );
+                  },
+                );
+              });
+            }),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override

@@ -25,6 +25,8 @@ class _DetailContinuePlayState extends State<DetailContinuePlay> {
     return Obx(() {
       late String noEpisodesString;
       late String watchNowString;
+      final isDownloadSelectorState = c.isDownloadSelectorState.value;
+
       if (c.type == ExtensionType.bangumi) {
         noEpisodesString = 'video.no-episodes'.i18n;
         watchNowString = 'video.watch-now'.i18n;
@@ -34,48 +36,50 @@ class _DetailContinuePlayState extends State<DetailContinuePlay> {
       }
 
       final noEpisodes = FilledButton.icon(
-        onPressed: () {},
+        onPressed: !isDownloadSelectorState ? () {} : null,
         icon: const Icon(Icons.play_arrow),
         label: Text(noEpisodesString),
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.grey),
-          foregroundColor: MaterialStateProperty.all(Colors.white),
-          minimumSize: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(Colors.grey),
+          foregroundColor: WidgetStateProperty.all(Colors.white),
+          minimumSize: WidgetStateProperty.all(
             const Size(double.infinity, 50),
           ),
         ),
       );
 
-      final history = c.history.value;
       final data = c.detail;
       if (c.isLoading.value) {
         return noEpisodes;
       }
       // 之前弄错了，所以需要判断标题是否为空
       if (c.history.value != null && c.history.value!.episodeTitle.isNotEmpty) {
+        final history = c.history.value!;
         return FilledButton.icon(
-          onPressed: () {
-            c.goWatch(
-              context,
-              data!.episodes![history.episodeGroupId].urls,
-              history.episodeId,
-              history.episodeGroupId,
-            );
-          },
+          onPressed: !isDownloadSelectorState
+              ? () {
+                  c.goWatch(
+                    context,
+                    data!.episodes![history.episodeGroupId].urls,
+                    history.episodeId,
+                    history.episodeGroupId,
+                  );
+                }
+              : null,
           icon: const Icon(Icons.play_arrow),
           label: Text(
             FlutterI18n.translate(
               context,
               'detail.continue-watching',
               translationParams: {
-                'episode': history!.episodeTitle,
+                'episode': history.episodeTitle,
               },
             ),
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(
+            minimumSize: WidgetStateProperty.all(
               const Size(double.infinity, 50),
             ),
           ),
@@ -83,18 +87,20 @@ class _DetailContinuePlayState extends State<DetailContinuePlay> {
       }
       if (data!.episodes != null && data.episodes!.isNotEmpty) {
         return FilledButton.icon(
-          onPressed: () {
-            c.goWatch(
-              context,
-              data.episodes![0].urls,
-              0,
-              0,
-            );
-          },
+          onPressed: !isDownloadSelectorState
+              ? () {
+                  c.goWatch(
+                    context,
+                    data.episodes![0].urls,
+                    0,
+                    0,
+                  );
+                }
+              : null,
           icon: const Icon(Icons.play_arrow),
           label: Text(watchNowString),
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(
+            minimumSize: WidgetStateProperty.all(
               const Size(double.infinity, 50),
             ),
           ),
@@ -108,16 +114,19 @@ class _DetailContinuePlayState extends State<DetailContinuePlay> {
     return Obx(() {
       final history = c.history.value;
       final data = c.detail!;
+      final isDownloadSelectorState = c.isDownloadSelectorState.value;
       if (history != null && c.history.value!.episodeTitle.isNotEmpty) {
         return fluent.FilledButton(
-          onPressed: () {
-            c.goWatch(
-              context,
-              data.episodes![history.episodeGroupId].urls,
-              history.episodeId,
-              history.episodeGroupId,
-            );
-          },
+          onPressed: !isDownloadSelectorState
+              ? () {
+                  c.goWatch(
+                    context,
+                    data.episodes![history.episodeGroupId].urls,
+                    history.episodeId,
+                    history.episodeGroupId,
+                  );
+                }
+              : null,
           child: Row(
             children: [
               const Icon(fluent.FluentIcons.play),

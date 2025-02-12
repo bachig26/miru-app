@@ -1,5 +1,23 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
+    "anime": "アニメ",
+    "manga": "マンガ",
     "home": "ホーム",
     "search": "検索",
     "extension": "拡張機能",
@@ -23,13 +41,24 @@
     "previous": "前",
     "show-all": "全て表示",
     "delete": "削除",
-    "delete-all": "全て削除"
+    "delete-all": "全て削除",
+    "save": "保存",
+    "save-success": "保存成功",
+    "logout": "ログアウト",
+    "login": "ログイン",
+    "no-data": "データなし",
+    "clear": "クリア",
+    "export": "輸出",
+    "off": "オフ",
+    "error-message": "エラーメッセージ",
+    "disconnect": "コネクト解除"
   },
   "home": {
     "continue-watching": "続ける",
     "favorite": "お気に入り",
     "no-record": "お気に入りや閲覧記録はありません",
-    "watched": "視聴済み {ep}"
+    "watched": "視聴済み {ep}",
+    "favorite-all": "略称 ： {type} お気に入り"
   },
   "search": {
     "hint-text": "検索を使ってください～！",
@@ -42,7 +71,8 @@
       "url-label": "拡張機能のURL",
       "tips": "リンクを通じて拡張機能をインポートすることも、以下の拡張機能ディレクトリをクリックしてそこに拡張機能ファイルを配置することもできます。",
       "extension-dir": "拡張機能ディレクトリ",
-      "import-by-url": "URLでインポート"
+      "import-by-url": "URLでインポート",
+      "import-by-local": "ローカルでインポート"
     },
     "error-dialog": "エラーメッセージ",
     "installed": "インストール済み",
@@ -55,6 +85,21 @@
     "upgrade": "更新"
   },
   "settings": {
+    "general": "総長",
+    "general-subtitle": "TMDB， 言語， テーマ， 更新を確認...",
+    "extension": "拡張機能",
+    "extension-subtitle": "拡張リポジトリ",
+    "video-player": "ビデオプレーヤー",
+    "video-player-subtitle": "BT サーバー、外部プレーヤー...",
+    "comic-reader": "コミックリーダー",
+    "comic-reader-subtitle": "デフォルトのリーダーモード...",
+    "tracking": "追跡",
+    "tracking-subtitle": "AniList...",
+    "auto-tracking": "自動追跡",
+    "auto-tracking-subtitle": "視聴 / 読書終了時に進捗を自動的に同期",
+    "about": "詳細",
+    "links": "リンク",
+    "contributors": "投稿者",
     "repo-url": "拡張機能リポジトリのURL",
     "repo-url-subtitle": "拡張機能リポジトリのURLを取得する",
     "tmdb-key": "TMDB APIキー",
@@ -82,15 +127,44 @@
     "language-subtitle": "ソフトウェアの言語を変更します",
     "extension-log": "拡張機能ログウィンドウ",
     "extension-log-subtitle": "拡張機能のデバッグに使用します",
-    "about": "詳細",
     "skip-interval": "スキップ間隔",
     "skip-interval-subtitle": "内蔵ビデオプレーヤーのスキップ間隔",
-    "default-reader-mode": "デフォルトのリーダーモード"
+    "default-reader-mode": "デフォルトのリーダーモード",
+    "network": "ネットワーク",
+    "network-subtitle": "プロキシ、ユーザーエージェント...",
+    "network-ua": "Webview ユーザーエージェント",
+    "network-ua-subtitle": "Web ビューと拡張機能のリクエストヘッダのユーザーエージェントを変更します。",
+    "proxy-type": "プロキシタイプ",
+    "proxy-type-subtitle": "リクエストのプロキシタイプ",
+    "proxy-type-direct": "直接",
+    "proxy-type-socks4": "靴下 4",
+    "proxy-type-socks5": "靴下 5",
+    "proxy-type-http": "HTTP",
+    "proxy": "プロキシ",
+    "proxy-subtitle": "プロキシアドレス （ 例 ： username ： password @ host ： port ）",
+    "log": "ログ",
+    "log-subtitle": "ログを保存、ログをエクスポート...",
+    "save-log": "ログを保存",
+    "save-log-subtitle": "自動保存ログファイル",
+    "export-log": "エクスポートログ",
+    "export-log-subtitle": "ログファイルのエクスポート",
+    "advanced": "アドバンスド",
+    "download": "ダウンロード",
+    "download-manager": "ダウンロードマネージャー",
+    "download-subtitle": "ダウンロードマネージャの設定",
+    "download-path": "ダウンロードパス",
+    "download-path-subtitle": "ダウンロードパスを選択します",
+    "download-path-select": "選択",
+    "download-max-task": "最大タスク",
+    "download-max-task-subtitle": "最大ダウンロードタスク。ネットワークの混雑を避けるために、合理的な値を設定することをお勧めします。"
   },
   "external-player-launching": "{player}を起動",
   "detail": {
+    "tracking": "追跡",
     "favorite": "お気に入り",
     "favorited": "お気に入り",
+    "download": "ダウンロード",
+    "confirm": "確認",
     "continue-watching": "{episode} を続ける",
     "total-episodes": "合計 {total}",
     "overview": "概要",
@@ -99,7 +173,9 @@
     "get-lastest-data-error": "最新データの取得に失敗しました",
     "modify-tmdb-binding": "TMDBバインディングを変更",
     "no-tmdb-data": "TMDBデータは一致していません。自分でデータをバインドしてください",
-    "tmdb-key-missing": "TMDB APIキーがありません、設定から入力してください"
+    "tmdb-key-missing": "TMDB APIキーがありません、設定から入力してください",
+    "tracker": "追跡",
+    "selectAll": "すべて選択"
   },
   "video": {
     "episodes": "エピソード",
@@ -112,6 +188,10 @@
     "subtitle-change": "字幕を変更 {title}",
     "subtitle-file": "字幕ファイル",
     "torrent-downloading": "Torrentでダウンロード",
+    "no-qualities": "品質なし",
+    "audio": "オーディオ",
+    "getting-streamlink": "ストリームリンクを取得する...",
+    "streamlink-error": "ストリームリンクを取得できませんでした",
     "tooltip": {
       "close": "閉じる",
       "subtitle": "字幕",
@@ -125,6 +205,34 @@
       "full-screen": "フルスクリーン",
       "volume": "音量",
       "torrent-file-list": "Torrentファイルリスト"
+    },
+    "cast": "デバイスにキャスト",
+    "cast-device": "演奏する {device}",
+    "sidebar": {
+      "tab": {
+        "episodes": "エピソード",
+        "qualitys": "クアリティス",
+        "torrentFiles": "トレントファイル",
+        "tracks": "トラック",
+        "settings": "設定"
+      },
+      "subtitle": {
+        "title": "字幕",
+        "font-size": "フォントサイズ",
+        "font-color": "フォントの色",
+        "background-color": "背景色",
+        "background-opacity": "背景不透明度",
+        "text-align": "テキストの整列",
+        "font-weight": "フォントの重さ",
+        "font-weight-normal": "ノーマル",
+        "font-weight-bold": "ボールド"
+      },
+      "play-mode": {
+        "title": "プレイモード",
+        "loop": "ループ",
+        "single": "シングル",
+        "auto-next": "自動次の"
+      }
     }
   },
   "comic-settings": {
@@ -135,6 +243,11 @@
   },
   "novel-settings": {
     "font-size": "フォントのサイズ"
+  },
+  "bugreport": {
+    "auto-remove-subtitle": "delete in ～ days",
+    "show-report-dialog": "レポートの表示ダイアログ",
+    "show-report-dialog-subtitle": "アプリの起動時にエラーレポートダイアログを表示する"
   },
   "reader": {
     "chapters": "チャプター",
@@ -178,7 +291,7 @@
     "release-date": "発売日",
     "genres": "ジャンル",
     "runtime": "実行時間",
-    "languages": "言語"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BTサーバーがインストールされていません",
@@ -189,5 +302,50 @@
     "stop": "停止",
     "upgrade": "アップグレード",
     "start": "開始"
+  },
+  "report": {
+    "copied": "クリップボードにコピー",
+    "github-bug-report": "GitHub に報告",
+    "title": "バグレポート",
+    "copy-message": "コピーエラーメッセージ",
+    "show-report-checkbox": "アプリの起動時にレポートダイアログを表示"
+  },
+  "anilist": {
+    "title": "AniList トラッキング",
+    "login-hint-1": "AniList にまだログインしていないようです。",
+    "login-hint-2": "まず AniList にログインしてください",
+    "status": "ステータス",
+    "score": "スコア",
+    "watching": "ウォッチング",
+    "reading": "読書",
+    "completed": "完了",
+    "paused": "休止",
+    "dropped": "ドロップ",
+    "planning": "企画",
+    "hold-on": "待って",
+    "re-watching": "再見",
+    "re-reading": "再読",
+    "start-date": "開始日",
+    "end-date": "終了日",
+    "unbind": "バインド解除",
+    "episodes": "エピソード",
+    "manga-chapter-read": "マンガ章を読む： {chapters}",
+    "anime-episode-watch": "アニメエピソード視聴 ： {episodes}"
+  },
+  "download": {
+    "download-manager": "ダウンロードマネージャー",
+    "resume": "履歴書",
+    "pause": "休止",
+    "cancel": "キャンセル",
+    "downloading": "ダウンロード",
+    "others": "その他",
+    "download-status": {
+      "queued": "キュー内",
+      "downloading": "ダウンロード",
+      "completed": "完了",
+      "failed": "失敗",
+      "paused": "休止",
+      "canceled": "キャンセル"
+    }
   }
 }

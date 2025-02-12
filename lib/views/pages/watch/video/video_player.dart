@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:miru_app/models/extension.dart';
 import 'package:miru_app/controllers/watch/video_controller.dart';
+import 'package:miru_app/models/miru_detail.dart';
 import 'package:miru_app/views/pages/watch/video/video_player_sidebar.dart';
 import 'package:miru_app/views/pages/watch/video/video_player_content.dart';
 import 'package:miru_app/data/services/extension_service.dart';
@@ -18,6 +19,8 @@ class VideoPlayer extends StatefulWidget {
     required this.title,
     required this.detailUrl,
     required this.anilistID,
+    required this.miruDetail,
+    required this.extensionDetail,
   });
 
   final String title;
@@ -27,6 +30,8 @@ class VideoPlayer extends StatefulWidget {
   final int episodeGroupId;
   final ExtensionService runtime;
   final String anilistID;
+  final MiruDetail miruDetail; // 里面存储了离线资源的信息
+  final ExtensionDetail extensionDetail; // 里面存储了漫画章节信息
 
   @override
   State<VideoPlayer> createState() => _VideoPlayerState();
@@ -46,6 +51,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
         episodeGroupId: widget.episodeGroupId,
         runtime: widget.runtime,
         anilistID: widget.anilistID,
+        miruDetail: widget.miruDetail,
+        extensionDetail: widget.extensionDetail,
       ),
       tag: widget.title,
     );

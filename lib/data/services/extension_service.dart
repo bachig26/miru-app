@@ -49,7 +49,7 @@ class ExtensionService {
     } else if (Platform.isWindows) {
       runtime = QuickJsRuntime2();
     } else if (Platform.isLinux) {
-      runtime = JavascriptCoreRuntime();
+      runtime = QuickJsRuntime2();
     } else {
       runtime = JavascriptCoreRuntime();
     }
@@ -254,27 +254,6 @@ class ExtensionService {
         'querySelectorAll', (dynamic args) => jsQuerySelectorAll(args));
     // css 选择器
     runtime.onMessage('querySelector', (arg) => jsQuerySelector(arg));
-    if (Platform.isLinux) {
-      handleDartBridge(String channelName, Function fn) {
-        jsBridge.setHandler(channelName, (message) async {
-          final args = jsonDecode(message);
-          final result = await fn(args);
-          await jsBridge.sendMessage(channelName, result);
-        });
-      }
-
-      jsBridge = JsBridge(jsRuntime: runtime);
-      handleDartBridge('cleanSettings$className', jsCleanSettings);
-      handleDartBridge('request$className', jsRequest);
-      handleDartBridge('log$className', jsLog);
-      handleDartBridge('queryXPath$className', jsQueryXPath);
-      handleDartBridge('removeSelector$className', jsRemoveSelector);
-      handleDartBridge("getAttributeText$className", jsGetAttributeText);
-      handleDartBridge('querySelectorAll$className', jsQuerySelectorAll);
-      handleDartBridge('querySelector$className', jsQuerySelector);
-      handleDartBridge('registerSetting$className', jsRegisterSetting);
-      handleDartBridge('getSetting$className', jsGetMessage);
-    }
     // 初始化运行扩展
     await _initRunExtension(content);
     return this;
@@ -284,168 +263,7 @@ class ExtensionService {
     final cryptoJs = await rootBundle.loadString('assets/js/CryptoJS.min.js');
     final jsencrypt = await rootBundle.loadString('assets/js/jsencrypt.min.js');
     final md5 = await rootBundle.loadString('assets/js/md5.min.js');
-    runtime.evaluate(Platform.isLinux
-        ? '''
-$cryptoJs
-$jsencrypt
-$md5
-class Element {
-  constructor(content, selector) {
-    this.content = content;
-    this.selector = selector || "";
-  }
-  async querySelector(selector) {
-    return new Element(await this.execute(), selector);
-  }
-
-  async execute(fun) {
-    return await handlePromise("querySelector$className",JSON.stringify([this.content, this.selector, fun]));
-  }
-
-  async removeSelector(selector) {
-    this.content = await handlePromise("removeSelector$className",JSON.stringify([await this.outerHTML, selector]));
-    return this;
-  }
-
-  async getAttributeText(attr) {
-    return await handlePromise("getAttributeText$className",JSON.stringify([await this.outerHTML, this.selector, attr]));
-  }
-
-  get text() {
-    return this.execute("text");
-  }
-
-  get outerHTML() {
-    return this.execute("outerHTML");
-  }
-
-  get innerHTML() {
-    return this.execute("innerHTML");
-  }
-}
-class XPathNode {
-  constructor(content, selector) {
-    this.content = content;
-    this.selector = selector;
-  }
-
-  async excute(fun) {
-    return await handlePromise("queryXPath$className",JSON.stringify([this.content, this.selector, fun]));
-  }
-
-  get attr() {
-    return this.excute("attr");
-  }
-
-  get attrs() {
-    return this.excute("attrs");
-  }
-
-  get text() {
-    return this.excute("text");
-  }
-  
-  get allHTML() {
-    return this.excute("allHTML");
-  }
-
-  get outerHTML() {
-    return this.excute("outerHTML");
-  }
-}
-
-// 重写 console.log
-console.log = function (message) {
-  if (typeof message === "object") {
-    message = JSON.stringify(message);
-  }
-  DartBridge.sendMessage("log$className", JSON.stringify([message.toString()]));
-};
-class Extension {
-  package = "${extension.package}";
-  name = "${extension.name}";
-  // 在 load 中注册的 keys
-  settingKeys = [];
-  
-  querySelector(content, selector) {
-    return new Element(content, selector);
-  }
-   async request(url, options) {
-    options = options || {};
-    options.headers = options.headers || {};
-    const miruUrl = options.headers["Miru-Url"] || "${extension.webSite}";
-    options.method = options.method || "get";
-    const message = await handlePromise("request$className",JSON.stringify([miruUrl + url, options,"${extension.package}"]));
-    try {
-      return JSON.parse(message);
-    }catch(e){
-      return message;
-    }
-  }
-  queryXPath(content, selector) {
-    return new XPathNode(content, selector);
-  }
-  async querySelectorAll(content, selector) {
-    const arg = await handlePromise("querySelectorAll$className",JSON.stringify({content:content, selector:selector}));
-    const message = JSON.parse(arg);
-    const elements = [];
-    for(const e of message){
-      elements.push(new Element(e, selector));
-    }
-    return elements;
-  }
-  async getAttributeText(content, selector, attr) {
-    const waitForChange  = new Promise(resolve=>{DartBridge.setHandler("getAttributeText$className", async (arg) => {
-      resolve(arg);
-    })});
-    DartBridge.sendMessage("getAttributeText$className",  JSON.stringify([content, selector, attr]));
-    const elements = await waitForChange;
-    return elements;
-  }
-  latest(page) {
-    throw new Error("not implement latest");
-  }
-  search(kw, page, filter) {
-    throw new Error("not implement search");
-  }
-  createFilter(filter){
-    throw new Error("not implement createFilter");
-  }
-  detail(url) {
-    throw new Error("not implement detail");
-  }
-  watch(url) {
-    throw new Error("not implement watch");
-  }
-  checkUpdate(url) {
-    throw new Error("not implement checkUpdate");
-  }
-  async getSetting(key) {
-    return await handlePromise("getSetting$className",JSON.stringify([key]));
-  }
-  async registerSetting(settings) {
-    console.log(JSON.stringify([settings]));
-    this.settingKeys.push(settings.key);
-    return await handlePromise("registerSetting$className",JSON.stringify([settings]));
-  }
-  async load() {}
-}
-async function handlePromise(channelName,message){
-  const waitForChange  = new Promise(resolve=>{DartBridge.setHandler(channelName, async (arg) => {
-    resolve(arg);
-  })});
-  DartBridge.sendMessage(channelName,  message);
-  return await waitForChange
-}
-async function stringify(callback) {
-  const data = await callback();
-  return typeof data === "object" ? JSON.stringify(data,0,2) : data;
-}
-
-
-
-            '''
-        : '''
+    runtime.evaluate('''
           // 重写 console.log
           var window = (global = globalThis);
           $cryptoJs
@@ -625,9 +443,6 @@ async function stringify(callback) {
       }
       var ${className}Instance = new $className();
       ${className}Instance.load().then(()=>{
-        if(${Platform.isLinux}){
-           DartBridge.sendMessage("cleanSettings$className",JSON.stringify([extension.settingKeys]));
-        }
         sendMessage("cleanSettings", JSON.stringify([extension.settingKeys]));
       });
     ''');
@@ -674,9 +489,8 @@ async function stringify(callback) {
   Future<List<ExtensionListItem>> latest(int page) async {
     return runExtension(() async {
       final jsResult = await runtime.handlePromise(
-        await runtime.evaluateAsync(Platform.isLinux
-            ? '${className}Instance.latest($page)'
-            : 'stringify(()=>${className}Instance.latest($page))'),
+        await runtime
+            .evaluateAsync('stringify(()=>${className}Instance.latest($page))'),
       );
 
       List<ExtensionListItem> result =
@@ -697,9 +511,8 @@ async function stringify(callback) {
   }) async {
     return runExtension(() async {
       final jsResult = await runtime.handlePromise(
-        await runtime.evaluateAsync(Platform.isLinux
-            ? '${className}Instance.search("$kw",$page,${filter == null ? null : jsonEncode(filter)})'
-            : 'stringify(()=>${className}Instance.search("$kw",$page,${filter == null ? null : jsonEncode(filter)}))'),
+        await runtime.evaluateAsync(
+            'stringify(()=>${className}Instance.search("$kw",$page,${filter == null ? null : jsonEncode(filter)}))'),
       );
       List<ExtensionListItem> result =
           jsonDecode(jsResult.stringResult).map<ExtensionListItem>((e) {
@@ -717,13 +530,10 @@ async function stringify(callback) {
   }) async {
     late String eval;
     if (filter == null) {
-      eval = Platform.isLinux
-          ? '${className}Instance.createFilter()'
-          : 'stringify(()=>${className}Instance.createFilter())';
+      eval = 'stringify(()=>${className}Instance.createFilter())';
     } else {
-      eval = Platform.isLinux
-          ? '${className}Instance.createFilter(JSON.parse(\'${jsonEncode(filter)}\'))'
-          : 'stringify(()=>${className}Instance.createFilter(JSON.parse(\'${jsonEncode(filter)}\')))';
+      eval =
+          'stringify(()=>${className}Instance.createFilter(JSON.parse(\'${jsonEncode(filter)}\')))';
     }
     return runExtension(() async {
       final jsResult = await runtime.handlePromise(
@@ -742,9 +552,8 @@ async function stringify(callback) {
   Future<ExtensionDetail> detail(String url) async {
     return runExtension(() async {
       final jsResult = await runtime.handlePromise(
-        await runtime.evaluateAsync(Platform.isLinux
-            ? '${className}Instance.detail("$url")'
-            : 'stringify(()=>${className}Instance.detail("$url"))'),
+        await runtime.evaluateAsync(
+            'stringify(()=>${className}Instance.detail("$url"))'),
       );
       final result =
           ExtensionDetail.fromJson(jsonDecode(jsResult.stringResult));
@@ -756,9 +565,8 @@ async function stringify(callback) {
   Future<Object?> watch(String url) async {
     return runExtension(() async {
       final jsResult = await runtime.handlePromise(
-        await runtime.evaluateAsync(Platform.isLinux
-            ? '${className}Instance.watch("$url")'
-            : 'stringify(()=>${className}Instance.watch("$url"))'),
+        await runtime
+            .evaluateAsync('stringify(()=>${className}Instance.watch("$url"))'),
       );
       final data = jsonDecode(jsResult.stringResult);
 

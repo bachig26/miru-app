@@ -19,6 +19,8 @@ class ComicController extends ReaderController<ExtensionMangaWatch> {
     required super.runtime,
     required super.cover,
     required super.anilistID,
+    required super.miruDetail,
+    required super.extensionDetail,
   });
   Map<String, MangaReadMode> readmode = {
     'standard': MangaReadMode.standard,
@@ -66,54 +68,65 @@ class ComicController extends ReaderController<ExtensionMangaWatch> {
       );
     });
     // 如果切换章节，重置当前页码
-    ever(super.index, (callback) => currentPage.value = 0);
-    ever(super.watchData, (callback) async {
-      if (isRecover.value || callback == null) {
-        return;
-      }
-
-      isRecover.value = true;
-      // 获取上次阅读的页码
-      final history = await DatabaseService.getHistoryByPackageAndUrl(
-        super.runtime.extension.package,
-        super.detailUrl,
-      );
-
-      if (history == null ||
-          history.progress.isEmpty ||
-          episodeGroupId != history.episodeGroupId ||
-          history.episodeId != index.value) {
-        return;
-      }
-      currentPage.value = int.parse(history.progress);
+    ever(super.index, (callback) {
+      currentPage.value = 0;
       _jumpPage(currentPage.value);
     });
+    ever(super.useOfflineData, (bool useOffline) {
+      final dataToWatch = useOffline ? super.offlineWatchData : super.watchData;
+      ever(dataToWatch, (callback) async {
+        if (isRecover.value || callback == null) {
+          return;
+        }
+
+        isRecover.value = true;
+        // 获取上次阅读的页码
+        final history = await DatabaseService.getHistoryByPackageAndUrl(
+          super.runtime.extension.package,
+          super.detailUrl,
+        );
+
+        if (history == null ||
+            history.progress.isEmpty ||
+            episodeGroupId != history.episodeGroupId ||
+            history.episodeId != index.value) {
+          return;
+        }
+        currentPage.value = int.parse(history.progress);
+        _jumpPage(currentPage.value);
+      });
+    });
+
     super.onInit();
   }
 
-  onKey(RawKeyEvent event) {
+  onKey(KeyEvent event) {
+    if (event is! KeyDownEvent) {
+      return;
+    }
     // 按下 ctrl
-    isZoom.value = event.isControlPressed;
+    isZoom.value = event.logicalKey == LogicalKeyboardKey.controlLeft ||
+        event.logicalKey == LogicalKeyboardKey.controlRight;
     // 上下
-    if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
       if (readType.value == MangaReadMode.webTonn) {
         return previousPage();
       }
     }
-    if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
       if (readType.value == MangaReadMode.webTonn) {
         return nextPage();
       }
     }
 
-    if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
       if (readType.value == MangaReadMode.rightToLeft) {
         return nextPage();
       }
       previousPage();
     }
 
-    if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
       if (readType.value == MangaReadMode.rightToLeft) {
         return previousPage();
       }

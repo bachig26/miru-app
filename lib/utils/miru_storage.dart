@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:isar/isar.dart';
+import 'package:miru_app/models/download_job.dart';
 import 'package:miru_app/models/index.dart';
 import 'package:miru_app/utils/miru_directory.dart';
 import 'package:path/path.dart' as p;
@@ -30,6 +31,7 @@ class MiruStorage {
         MangaSettingSchema,
         MiruDetailSchema,
         TMDBSchema,
+        DownloadJobSchema,
       ],
       directory: _path,
     );
@@ -135,6 +137,12 @@ class MiruStorage {
     await _initSetting(SettingKey.subtitleBackgroundColor, Colors.black.value);
     await _initSetting(SettingKey.subtitleBackgroundOpacity, 0.5);
     await _initSetting(SettingKey.subtitleTextAlign, TextAlign.center.index);
+
+    await _initSetting(SettingKey.downloadPath, '');
+    await _initSetting(SettingKey.downloadMaxTasks, 3);
+
+    await _initSetting(SettingKey.firstTimeSetup, true);
+    await _initSetting(SettingKey.isNotificationGranted, false);
   }
 
   static _initSetting(String key, dynamic value) async {
@@ -201,4 +209,10 @@ class SettingKey {
   static const subtitleTextAlign = "SubtitleTextAlign";
   static const subtitleLastLanguageSelected = "SubtitleLastLanguageSelected";
   static const subtitleLastTitleSelected = "SubtitleLastTitleSelected";
+  // Setting for downloader
+  static const downloadPath = "DownloadPath";
+  static const downloadMaxTasks = "DownloadMaxTasks";
+  // first time setup tag
+  static const firstTimeSetup = "FirstTimeSetup";
+  static const isNotificationGranted = "IsNotificationGranted";
 }

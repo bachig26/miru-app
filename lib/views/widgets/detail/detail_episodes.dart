@@ -8,6 +8,7 @@ import 'package:miru_app/views/widgets/detail/detail_continue_play.dart';
 import 'package:miru_app/utils/miru_storage.dart';
 import 'package:miru_app/views/widgets/card_tile.dart';
 import 'package:miru_app/utils/i18n.dart';
+import 'package:miru_app/views/widgets/detail/detail_download_button.dart';
 import 'package:miru_app/views/widgets/platform_widget.dart';
 
 class DetailEpisodes extends StatefulWidget {
@@ -28,221 +29,311 @@ class _DetailEpisodesState extends State<DetailEpisodes> {
   late List<ExtensionEpisodeGroup> episodes = [];
   late String listMode = MiruStorage.getSetting(SettingKey.listMode);
   bool isRevered = false;
+  late List<List<bool>> isSelected = c.isSelected;
+
   Widget _buildAndroidEpisodes(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // select 选择框
-        if (episodes.isNotEmpty) ...[
-          Container(
-              margin: const EdgeInsets.only(left: 8, top: 5, right: 8),
-              padding:
-                  const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
-              decoration: BoxDecoration(
-                // 背景颜色为 primaryContainer
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // select 选择框
+          if (episodes.isNotEmpty) ...[
+            Container(
+                margin: const EdgeInsets.only(left: 8, top: 5, right: 8),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                  // 背景颜色为 primaryContainer
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
                 ),
+                child: DropdownButton<int>(
+                  // 内容为 primary 颜色
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                  value: c.selectEpGroup.value,
+                  items: dropdownItems,
+                  onChanged: (value) {
+                    setState(() {
+                      c.selectEpGroup.value = value!;
+                    });
+                  },
+                )),
+            Container(
+              margin: const EdgeInsets.only(left: 16, top: 10),
+              child: Row(children: [
+                Text(
+                  FlutterI18n.translate(
+                    context,
+                    'detail.total-episodes',
+                    translationParams: {
+                      'total': episodes[c.selectEpGroup.value]
+                          .urls
+                          .length
+                          .toString(),
+                    },
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Transform.flip(
+                  flipY: isRevered,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isRevered = !isRevered;
+                      });
+                    },
+                    icon: const Icon(Icons.sort_rounded),
+                  ),
+                )
+              ]),
+            )
+          ],
+          Expanded(
+            child: !c.isDownloadSelectorState.value
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(0),
+                    itemCount: episodes.isEmpty
+                        ? 0
+                        : episodes[c.selectEpGroup.value].urls.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: isRevered
+                            ? Text(episodes[c.selectEpGroup.value]
+                                .urls[episodes[c.selectEpGroup.value]
+                                        .urls
+                                        .length -
+                                    1 -
+                                    index]
+                                .name)
+                            : Text(episodes[c.selectEpGroup.value]
+                                .urls[index]
+                                .name),
+                        onTap: () {
+                          c.goWatch(
+                            context,
+                            episodes[c.selectEpGroup.value].urls,
+                            isRevered
+                                ? episodes[c.selectEpGroup.value].urls.length -
+                                    1 -
+                                    index
+                                : index,
+                            c.selectEpGroup.value,
+                          );
+                        },
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(0),
+                    itemCount: episodes.isEmpty
+                        ? 0
+                        : episodes[c.selectEpGroup.value].urls.length,
+                    itemBuilder: (context, index) {
+                      return CheckboxListTile(
+                        title: isRevered
+                            ? Text(episodes[c.selectEpGroup.value]
+                                .urls[episodes[c.selectEpGroup.value]
+                                        .urls
+                                        .length -
+                                    1 -
+                                    index]
+                                .name)
+                            : Text(episodes[c.selectEpGroup.value]
+                                .urls[index]
+                                .name),
+                        value: isRevered
+                            ? isSelected[c.selectEpGroup.value][
+                                episodes[c.selectEpGroup.value].urls.length -
+                                    1 -
+                                    index]
+                            : isSelected[c.selectEpGroup.value][index],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isRevered
+                                ? isSelected[c.selectEpGroup.value][
+                                    episodes[c.selectEpGroup.value]
+                                            .urls
+                                            .length -
+                                        1 -
+                                        index] = value!
+                                : isSelected[c.selectEpGroup.value][index] =
+                                    value!;
+                          });
+                        },
+                      );
+                    },
+                  ),
+          )
+        ],
+      );
+    });
+  }
+
+  Widget _buildDesktopEpisodes(BuildContext context) {
+    return Obx(() {
+      late String episodesString;
+
+      if (c.type == ExtensionType.bangumi) {
+        episodesString = 'video.episodes'.i18n;
+      } else {
+        episodesString = 'reader.chapters'.i18n;
+      }
+
+      Widget cardTile(Widget child) {
+        return CardTile(
+          title: episodesString,
+          leading: Row(children: [
+            fluent.IconButton(
+              icon: Icon(
+                listMode == "grid"
+                    ? fluent.FluentIcons.view_list
+                    : fluent.FluentIcons.grid_view_medium,
               ),
-              child: DropdownButton<int>(
-                // 内容为 primary 颜色
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                isExpanded: true,
-                underline: const SizedBox(),
+              onPressed: () {
+                setState(() {
+                  listMode == "grid" ? listMode = "list" : listMode = "grid";
+                  MiruStorage.setSetting(SettingKey.listMode, listMode);
+                });
+              },
+            ),
+            fluent.IconButton(
+              icon: isRevered
+                  ? const Icon(fluent.FluentIcons.sort_lines_ascending)
+                  : const Icon(fluent.FluentIcons.sort_lines),
+              onPressed: () {
+                setState(() {
+                  isRevered = !isRevered;
+                  // MiruStorage.setSetting(SettingKey.listMode, listMode);
+                });
+              },
+            )
+          ]),
+          trailing: Row(
+            children: [
+              DetailDownloadButton(tag: widget.tag),
+              const SizedBox(width: 8),
+              DetailContinuePlay(tag: widget.tag),
+              const SizedBox(width: 8),
+              fluent.ComboBox<int>(
+                items: comboBoxItems,
                 value: c.selectEpGroup.value,
-                items: dropdownItems,
                 onChanged: (value) {
                   setState(() {
                     c.selectEpGroup.value = value!;
                   });
                 },
-              )),
-          Container(
-            margin: const EdgeInsets.only(left: 16, top: 10),
-            child: Row(children: [
-              Text(
-                FlutterI18n.translate(
-                  context,
-                  'detail.total-episodes',
-                  translationParams: {
-                    'total':
-                        episodes[c.selectEpGroup.value].urls.length.toString(),
-                  },
-                ),
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              Transform.flip(
-                flipY: isRevered,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isRevered = !isRevered;
-                    });
-                  },
-                  icon: const Icon(Icons.sort_rounded),
-                ),
               )
-            ]),
-          )
-        ],
-        Expanded(
-          child: ListView.builder(
+            ],
+          ),
+          child: Container(
+            constraints: const BoxConstraints(
+              maxHeight: 500,
+            ),
+            child: child,
+          ),
+        );
+      }
+
+      if (c.isDownloadSelectorState.value) {
+        return cardTile(
+          ListView.builder(
+            shrinkWrap: true,
+            reverse: isRevered,
             padding: const EdgeInsets.all(0),
             itemCount: episodes.isEmpty
                 ? 0
                 : episodes[c.selectEpGroup.value].urls.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: isRevered
-                    ? Text(episodes[c.selectEpGroup.value]
-                        .urls[episodes[c.selectEpGroup.value].urls.length -
-                            1 -
-                            index]
-                        .name)
-                    : Text(episodes[c.selectEpGroup.value].urls[index].name),
-                onTap: () {
-                  c.goWatch(
-                    context,
-                    episodes[c.selectEpGroup.value].urls,
-                    isRevered
-                        ? episodes[c.selectEpGroup.value].urls.length -
-                            1 -
-                            index
-                        : index,
-                    c.selectEpGroup.value,
+              return fluent.ListTile(
+                title: fluent.Row(
+                  children: [
+                    fluent.Checkbox(
+                      checked: isSelected[c.selectEpGroup.value][index],
+                      onChanged: (value) {
+                        setState(() {
+                          isSelected[c.selectEpGroup.value][index] = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 5),
+                    Text(episodes[c.selectEpGroup.value].urls[index].name),
+                  ],
+                ),
+                onPressed: null,
+              );
+            },
+          ),
+        );
+      }
+
+      if (listMode == "grid") {
+        return cardTile(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return GridView.builder(
+                reverse: isRevered,
+                shrinkWrap: true,
+                itemCount: episodes.isEmpty
+                    ? 0
+                    : episodes[c.selectEpGroup.value].urls.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constraints.maxWidth ~/ 180,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 5,
+                ),
+                itemBuilder: (context, index) {
+                  return fluent.Button(
+                    child: Center(
+                        child: Text(
+                            episodes[c.selectEpGroup.value].urls[index].name)),
+                    onPressed: () async {
+                      c.goWatch(
+                        context,
+                        episodes[c.selectEpGroup.value].urls,
+                        index,
+                        c.selectEpGroup.value,
+                      );
+                    },
                   );
                 },
               );
             },
           ),
-        )
-      ],
-    );
-  }
+        );
+      }
 
-  Widget _buildDesktopEpisodes(BuildContext context) {
-    late String episodesString;
-    if (c.type == ExtensionType.bangumi) {
-      episodesString = 'video.episodes'.i18n;
-    } else {
-      episodesString = 'reader.chapters'.i18n;
-    }
-
-    Widget cardTile(Widget child) {
-      return CardTile(
-        title: episodesString,
-        leading: Row(children: [
-          fluent.IconButton(
-            icon: Icon(
-              listMode == "grid"
-                  ? fluent.FluentIcons.view_list
-                  : fluent.FluentIcons.grid_view_medium,
-            ),
-            onPressed: () {
-              setState(() {
-                listMode == "grid" ? listMode = "list" : listMode = "grid";
-                MiruStorage.setSetting(SettingKey.listMode, listMode);
-              });
-            },
-          ),
-          fluent.IconButton(
-            icon: isRevered
-                ? const Icon(fluent.FluentIcons.sort_lines_ascending)
-                : const Icon(fluent.FluentIcons.sort_lines),
-            onPressed: () {
-              setState(() {
-                isRevered = !isRevered;
-                // MiruStorage.setSetting(SettingKey.listMode, listMode);
-              });
-            },
-          )
-        ]),
-        trailing: Row(
-          children: [
-            const DetailContinuePlay(),
-            const SizedBox(width: 8),
-            fluent.ComboBox<int>(
-              items: comboBoxItems,
-              value: c.selectEpGroup.value,
-              onChanged: (value) {
-                setState(() {
-                  c.selectEpGroup.value = value!;
-                });
-              },
-            )
-          ],
-        ),
-        child: Container(
-          constraints: const BoxConstraints(
-            maxHeight: 500,
-          ),
-          child: child,
-        ),
-      );
-    }
-
-    if (listMode == "grid") {
       return cardTile(
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return GridView.builder(
-              reverse: isRevered,
-              shrinkWrap: true,
-              itemCount: episodes.isEmpty
-                  ? 0
-                  : episodes[c.selectEpGroup.value].urls.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constraints.maxWidth ~/ 180,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                childAspectRatio: 5,
-              ),
-              itemBuilder: (context, index) {
-                return fluent.Button(
-                  child: Center(
-                      child: Text(
-                          episodes[c.selectEpGroup.value].urls[index].name)),
-                  onPressed: () async {
-                    c.goWatch(
-                      context,
-                      episodes[c.selectEpGroup.value].urls,
-                      index,
-                      c.selectEpGroup.value,
-                    );
-                  },
+        ListView.builder(
+          shrinkWrap: true,
+          reverse: isRevered,
+          padding: const EdgeInsets.all(0),
+          itemCount: episodes.isEmpty
+              ? 0
+              : episodes[c.selectEpGroup.value].urls.length,
+          itemBuilder: (context, index) {
+            return fluent.ListTile(
+              title: Text(episodes[c.selectEpGroup.value].urls[index].name),
+              onPressed: () {
+                c.goWatch(
+                  context,
+                  episodes[c.selectEpGroup.value].urls,
+                  index,
+                  c.selectEpGroup.value,
                 );
               },
             );
           },
         ),
       );
-    }
-
-    return cardTile(
-      ListView.builder(
-        shrinkWrap: true,
-        reverse: isRevered,
-        padding: const EdgeInsets.all(0),
-        itemCount:
-            episodes.isEmpty ? 0 : episodes[c.selectEpGroup.value].urls.length,
-        itemBuilder: (context, index) {
-          return fluent.ListTile(
-            title: Text(episodes[c.selectEpGroup.value].urls[index].name),
-            onPressed: () {
-              c.goWatch(
-                context,
-                episodes[c.selectEpGroup.value].urls,
-                index,
-                c.selectEpGroup.value,
-              );
-            },
-          );
-        },
-      ),
-    );
+    });
   }
 
   @override

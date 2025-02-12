@@ -104,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
               kw: c.search.value,
               runtimeList: list,
               onClickMore: (index) {
-                Get.to(ExtensionSearcherPage(
+                Get.to(() => ExtensionSearcherPage(
                   package: c.getPackgeByIndex(index),
                   keyWord: c.search.value,
                 ));

@@ -6,9 +6,12 @@ import 'package:miru_app/models/history.dart';
 import 'package:miru_app/controllers/home_controller.dart';
 import 'package:miru_app/data/services/database_service.dart';
 import 'package:miru_app/data/services/extension_service.dart';
+import 'package:miru_app/models/miru_detail.dart';
+import 'package:miru_app/utils/log.dart';
+import 'package:miru_app/utils/path_utils.dart';
 
 class ReaderController<T> extends GetxController {
-  final String title;
+  final String title; // 这个应该是漫画标题（吧）
   final List<ExtensionEpisode> playList;
   final String detailUrl;
   final int playIndex;
@@ -16,6 +19,8 @@ class ReaderController<T> extends GetxController {
   final ExtensionService runtime;
   final String? cover;
   final String anilistID;
+  final MiruDetail miruDetail; // 里面存储了离线资源的信息
+  final ExtensionDetail extensionDetail; // 里面存储了漫画章节信息
 
   ReaderController({
     required this.title,
@@ -25,10 +30,14 @@ class ReaderController<T> extends GetxController {
     required this.episodeGroupId,
     required this.runtime,
     required this.anilistID,
+    required this.miruDetail,
+    required this.extensionDetail,
     this.cover,
   });
 
   late Rx<T?> watchData = Rx(null);
+  late Rx<List<String>> offlineWatchData = Rx([]);
+  final useOfflineData = false.obs;
   final error = ''.obs;
   final isShowControlPanel = false.obs;
   late final index = playIndex.obs;
@@ -44,9 +53,22 @@ class ReaderController<T> extends GetxController {
 
   getContent() async {
     try {
+      // 首先获取最新的MiruDetail
+      final newMiruDetail = await DatabaseService.getMiruDetailByInstance(miruDetail);
+      final epTitle = extensionDetail.episodes?[episodeGroupId].title;
+      final itemTitle =
+          extensionDetail.episodes?[episodeGroupId].urls[index.value].name;
+      logger.info('ReaderController: getContent: $epTitle - $itemTitle, offline: ${newMiruDetail!.offlineResource}');
       error.value = '';
       watchData.value = null;
-      watchData.value = await runtime.watch(cuurentPlayUrl) as T;
+      if (newMiruDetail.offlineResource[epTitle]?[itemTitle] != null) {
+        final itemPath = newMiruDetail.offlineResource[epTitle]![itemTitle]!;
+        offlineWatchData.value = await getSortedFiles(itemPath);
+        useOfflineData.value = true;
+      } else {
+        watchData.value = await runtime.watch(cuurentPlayUrl) as T;
+        useOfflineData.value = false;
+      }
     } catch (e) {
       error.value = e.toString();
     }

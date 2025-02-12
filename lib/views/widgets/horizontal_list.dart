@@ -11,7 +11,7 @@ class HorizontalList extends StatefulWidget {
     this.itemCount,
     this.itemBuilder,
     this.contentBuilder,
-  })  : assert(
+  }) : assert(
           (itemCount != null && itemBuilder != null) || contentBuilder != null,
           "itemCount and itemBuilder or contentBuilder must not be null",
         );

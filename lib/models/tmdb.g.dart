@@ -861,7 +861,7 @@ extension TMDBQueryProperty on QueryBuilder<TMDB, TMDB, QQueryProperty> {
 // **************************************************************************
 
 TMDBDetail _$TMDBDetailFromJson(Map<String, dynamic> json) => TMDBDetail(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       mediaType: json['mediaType'] as String,
       title: json['title'] as String,
       cover: json['cover'] as String,
@@ -878,7 +878,7 @@ TMDBDetail _$TMDBDetailFromJson(Map<String, dynamic> json) => TMDBDetail(
           .map((e) => TMDBCast.fromJson(e as Map<String, dynamic>))
           .toList(),
       releaseDate: json['releaseDate'] as String,
-      runtime: json['runtime'] as int,
+      runtime: (json['runtime'] as num).toInt(),
       originalTitle: json['originalTitle'] as String,
     );
 
@@ -901,7 +901,7 @@ Map<String, dynamic> _$TMDBDetailToJson(TMDBDetail instance) =>
     };
 
 TMDBCast _$TMDBCastFromJson(Map<String, dynamic> json) => TMDBCast(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       profilePath: json['profilePath'] as String?,
       character: json['character'] as String,

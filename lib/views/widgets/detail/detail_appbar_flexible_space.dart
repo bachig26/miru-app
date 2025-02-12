@@ -5,7 +5,6 @@ import 'package:miru_app/views/widgets/detail/detail_continue_play.dart';
 import 'package:miru_app/views/widgets/detail/detail_extension_tile.dart';
 import 'package:miru_app/views/widgets/detail/detail_favorite_button.dart';
 import 'package:miru_app/views/widgets/cache_network_image.dart';
-import 'package:miru_app/views/widgets/cover.dart';
 
 class DetailAppbarflexibleSpace extends StatefulWidget {
   const DetailAppbarflexibleSpace({
@@ -42,10 +41,10 @@ class _DetailAppbarflexibleSpaceState extends State<DetailAppbarflexibleSpace> {
   double _scrollListener() {
     if (_offset <= 0) {
       return 1;
-    } else if (_offset >= 300) {
+    } else if (_offset >= 270) {
       return 0;
     } else {
-      return (_offset - 300) / (0 - 300);
+      return (_offset - 270) / (0 - 270);
     }
   }
 
@@ -67,36 +66,12 @@ class _DetailAppbarflexibleSpaceState extends State<DetailAppbarflexibleSpace> {
         child: Stack(
           children: [
             SizedBox(
-              height: 400,
-              width: double.infinity,
-              child: c.isLoading.value
-                  ? const SizedBox.shrink()
-                  : Cover(
-                      alt: c.data.value?.title ?? '',
-                      url: c.backgorund,
-                      noText: true,
-                      headers: c.detail?.headers,
-                    ),
-            ),
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      // 主题背景色
-                      Theme.of(context).colorScheme.background.withOpacity(0.3),
-                      Theme.of(context).colorScheme.background.withOpacity(0.9),
-                      Theme.of(context).colorScheme.background,
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                height: 400,
+                width: double.infinity,
+                child: const SizedBox.shrink()),
             Positioned(
               left: 20,
-              bottom: 105,
+              bottom: 135,
               right: 20,
               child: Row(
                 children: [
@@ -129,6 +104,8 @@ class _DetailAppbarflexibleSpaceState extends State<DetailAppbarflexibleSpace> {
                             c.isLoading.value ? "" : c.data.value!.title,
                             softWrap: true,
                             style: Get.theme.textTheme.titleLarge,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 10),
                           DetailExtensionTile(
@@ -145,22 +122,27 @@ class _DetailAppbarflexibleSpaceState extends State<DetailAppbarflexibleSpace> {
               top: null,
               left: 20,
               right: 20,
-              bottom: 40,
-              child: Row(
+              bottom: 20,
+              child: Column(
                 children: [
-                  Expanded(
-                    child: DetailContinuePlay(
-                      tag: widget.tag,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DetailContinuePlay(
+                          tag: widget.tag,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      DetailFavoriteButton(
+                        tag: widget.tag,
+                      ),
+                    ],
                   ),
                   const SizedBox(
-                    width: 20,
+                    height: 25,
                   ),
-                  Expanded(
-                    child: DetailFavoriteButton(
-                      tag: widget.tag,
-                    ),
-                  )
                 ],
               ),
             ),

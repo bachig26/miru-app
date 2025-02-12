@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:miru_app/data/services/download/download_manager.dart';
 import 'package:miru_app/utils/miru_storage.dart';
 
 class ApplicationController extends GetxController {
   static get find => Get.find();
 
   final themeText = "system".obs;
+  final activeTasks = <TaskInternal>[].obs;
+  final othersTasks = <TaskInternal>[].obs;
 
   @override
   void onInit() {
@@ -33,12 +36,10 @@ class ApplicationController extends GetxController {
           primaryColorLight: Colors.black,
           colorScheme: const ColorScheme.dark(
             primary: Colors.white,
-            onBackground: Colors.white,
             onSecondary: Colors.white,
             onSurface: Colors.white,
             secondary: Colors.grey,
             surface: Colors.black,
-            background: Colors.black,
             onPrimary: Colors.black,
             primaryContainer: Color.fromARGB(255, 31, 31, 31),
             surfaceTint: Colors.black,

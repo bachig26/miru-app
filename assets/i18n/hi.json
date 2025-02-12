@@ -1,5 +1,23 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
+    "anime": "एनीमे",
+    "manga": "मंगा",
     "home": "मुख्य पृष्ठ",
     "search": "खोजें",
     "extension": "एक्सटेंशन",
@@ -23,13 +41,24 @@
     "previous": "पिछला",
     "show-all": "सभी दिखाएं",
     "delete": "हटाएं",
-    "delete-all": "सभी हटाएं"
+    "delete-all": "सभी हटाएं",
+    "save": "सहेजें",
+    "save-success": "सफलता को सहेजें",
+    "logout": "लॉगआउट",
+    "login": "लॉग इन करें",
+    "no-data": "कोई डेटा नहीं",
+    "clear": "स्पष्ट",
+    "export": "निर्यात",
+    "off": "बंद",
+    "error-message": "त्रुटि संदेश",
+    "disconnect": "डिस्कनेक्ट करें"
   },
   "home": {
     "continue-watching": "जारी रखें",
     "favorite": "पसंदीदा",
     "no-record": "कोई पसंदीदा या देखने का रिकॉर्ड नहीं",
-    "watched": "देखा गया {ep}"
+    "watched": "देखा गया {ep}",
+    "favorite-all": "सभी {type} पसंदीदा"
   },
   "search": {
     "hint-text": "कृपया खोज का उपयोग समझदारी से करें!",
@@ -42,7 +71,8 @@
       "url-label": "एक्सटेंशन URL",
       "tips": "आप एक लिंक के माध्यम से एक्सटेंशन आयात कर सकते हैं, या नीचे दिए एक्सटेंशन डायरेक्टरी पर क्लिक करके एक्सटेंशन फ़ाइल वहां रख सकते हैं।",
       "extension-dir": "एक्सटेंशन डायरेक्टरी",
-      "import-by-url": "URL से आयात करें"
+      "import-by-url": "URL से आयात करें",
+      "import-by-local": "स्थानीय रूप से आयात करें"
     },
     "error-dialog": "त्रुटि संदेश",
     "installed": "स्थापित",
@@ -55,6 +85,21 @@
     "upgrade": "अपग्रेड करें"
   },
   "settings": {
+    "general": "जनरल",
+    "general-subtitle": "टीएमडीबी, भाषा, विषय, अद्यतन के लिए जाँच करें ...",
+    "extension": "विस्तार",
+    "extension-subtitle": "विस्तार भंडार",
+    "video-player": "वीडियो प्लेयर",
+    "video-player-subtitle": "बीटी सर्वर, बाहरी प्लेयर ...",
+    "comic-reader": "कॉमिक रीडर",
+    "comic-reader-subtitle": "डिफ़ॉल्ट रीडर मोड...",
+    "tracking": "ट्रैकिंग",
+    "tracking-subtitle": "एनीलिस्ट...",
+    "auto-tracking": "ऑटो ट्रैकिंग",
+    "auto-tracking-subtitle": "देखना / पढ़ना समाप्त होने पर प्रगति को स्वचालित रूप से सिंक करें",
+    "about": "जानकारी",
+    "links": "लिंक्स",
+    "contributors": "योगदानकर्ता",
     "repo-url": "एक्सटेंशन रिपॉजिटरी URL",
     "repo-url-subtitle": "एक्सटेंशन्स के लिए रिपॉजिटरी URL प्राप्त करें",
     "tmdb-key": "TMDB API कुंजी",
@@ -73,6 +118,7 @@
     "theme-system": "सिस्टम",
     "theme-light": "लाइट",
     "theme-dark": "डार्क",
+    "theme-black": "काले",
     "nsfw": "NSFW",
     "nsfw-subtitle": "NSFW सामग्री दिखाएं",
     "external-player": "पसंदीदा वीडियो प्लेयर",
@@ -81,12 +127,44 @@
     "language-subtitle": "सॉफ़्टवेयर की भाषा बदलें",
     "extension-log": "एक्सटेंशन लॉग विंडो",
     "extension-log-subtitle": "एक्सटेंशन्स को डिबग करने के लिए प्रयुक्त होता है",
-    "about": "जानकारी"
+    "skip-interval": "अंतराल छोड़ें",
+    "skip-interval-subtitle": "अंतर्निहित वीडियो प्लेयर के लिए अंतराल छोड़ना",
+    "default-reader-mode": "डिफ़ॉल्ट रीडर मोड",
+    "network": "नेटवर्क",
+    "network-subtitle": "प्रॉक्सी, उपयोगकर्ता-एजेन्ट...",
+    "network-ua": "वेबव्यू उपयोगकर्ता-एजेेंट",
+    "network-ua-subtitle": "Webviews और Extensions के लिए अनुरोध हेडर में User-Agent को संशोधित करें।",
+    "proxy-type": "प्रॉक्सी प्रकार",
+    "proxy-type-subtitle": "अनुरोधों के लिए प्रॉक्सी प्रकार",
+    "proxy-type-direct": "प्रत्यक्ष",
+    "proxy-type-socks4": "सूट4",
+    "proxy-type-socks5": "मोज़े5",
+    "proxy-type-http": "HTTP",
+    "proxy": "प्रॉक्सी",
+    "proxy-subtitle": "प्रॉक्सी पता (उदाहरण के लिए उपयोगकर्ता नाम: पासवर्ड@ होस्ट: पोर्ट)",
+    "log": "लॉग",
+    "log-subtitle": "लॉग सहेजें, लॉग निर्यात करें...",
+    "save-log": "लॉग सहेजें",
+    "save-log-subtitle": "लॉग फ़ाइल को ऑटो सहेजें",
+    "export-log": "निर्यात लॉग",
+    "export-log-subtitle": "लॉग फ़ाइल का निर्यात करें",
+    "advanced": "उन्नत",
+    "download": "डाउनलोड करें",
+    "download-manager": "डाउनलोड प्रबंधक",
+    "download-subtitle": "डाउनलोड प्रबंधक सेटिंग्स",
+    "download-path": "डाउनलोड पथ",
+    "download-path-subtitle": "डाउनलोड पथ का चयन करें",
+    "download-path-select": "चयन करें",
+    "download-max-task": "अधिकतम कार्य",
+    "download-max-task-subtitle": "मैक्स टास्क डाउनलोड करेंनेटवर्क भीड़ से बचने के लिए, उचित मूल्य निर्धारित करने की सिफारिश की जाती है"
   },
   "external-player-launching": "{player} को चालना",
   "detail": {
+    "tracking": "ट्रैकिंग",
     "favorite": "पसंदीदा",
     "favorited": "पसंदीदा",
+    "download": "डाउनलोड करें",
+    "confirm": "पुष्टि करें",
     "continue-watching": "{episode} जारी रखें",
     "total-episodes": "कुल {total}",
     "overview": "अवलोकन",
@@ -95,7 +173,9 @@
     "get-lastest-data-error": "नवीनतम डेटा प्राप्त करने में विफल",
     "modify-tmdb-binding": "TMDB बाइंडिंग बदलें",
     "no-tmdb-data": "कोई TMDB डेटा मेल नहीं रहा है, कृपया खुद डेटा बाइंड करें",
-    "tmdb-key-missing": "TMDB API कुंजी गायब है, कृपया सेटिंग्स में दर्ज करें"
+    "tmdb-key-missing": "TMDB API कुंजी गायब है, कृपया सेटिंग्स में दर्ज करें",
+    "tracker": "ट्रैकिंग",
+    "selectAll": "सभी का चयन करें"
   },
   "video": {
     "episodes": "एपिसोड्स",
@@ -107,7 +187,53 @@
     "subtitle": "सबटाइटल",
     "subtitle-change": "सबटाइटल बदलें {title}",
     "subtitle-file": "सबटाइटल फ़ाइल",
-    "torrent-downloading": "टॉरेंट डाउनलोड हो रहा है"
+    "torrent-downloading": "टॉरेंट डाउनलोड हो रहा है",
+    "no-qualities": "कोई गुणवत्ता उपलब्ध नहीं",
+    "audio": "ऑडियो",
+    "getting-streamlink": "स्ट्रीमलिंक प्राप्त करना...",
+    "streamlink-error": "स्ट्रीमलिंक प्राप्त करने में विफल",
+    "tooltip": {
+      "close": "बंद करें",
+      "subtitle": "उपशीर्षक",
+      "play-list": "प्ले सूची",
+      "quality": "गुणवत्ता",
+      "speed": "गति",
+      "play": "खेलें",
+      "play-or-pause": "रुकावट",
+      "previous": "Previous Previous post",
+      "next": "अगला",
+      "full-screen": "पूर्ण स्क्रीन",
+      "volume": "वॉल्यूम",
+      "torrent-file-list": "टोरेंट फ़ाइल सूची"
+    },
+    "cast": "डिवाइस को कैस्ट करें",
+    "cast-device": "खेलते हैं {device}",
+    "sidebar": {
+      "tab": {
+        "episodes": "एपिसोड",
+        "qualitys": "गुणों",
+        "torrentFiles": "टोरेंट फ़ाइलें",
+        "tracks": "ट्रैक",
+        "settings": "सेटिंग्स"
+      },
+      "subtitle": {
+        "title": "उपशीर्षक",
+        "font-size": "फ़ॉन्ट आकार",
+        "font-color": "फ़ॉन्ट रंग",
+        "background-color": "पृष्ठभूमि रंग",
+        "background-opacity": "पृष्ठभूमि अस्पष्टता",
+        "text-align": "पाठ संरेखण करें",
+        "font-weight": "फ़ॉन्ट वजन",
+        "font-weight-normal": "सामान्य",
+        "font-weight-bold": "बोल्ड"
+      },
+      "play-mode": {
+        "title": "प्ले मोड",
+        "loop": "लूप",
+        "single": "एकल",
+        "auto-next": "Next कार"
+      }
+    }
   },
   "comic-settings": {
     "read-mode": "पढ़ने का मोड",
@@ -117,6 +243,11 @@
   },
   "novel-settings": {
     "font-size": "फ़ॉन्ट साइज़"
+  },
+  "bugreport": {
+    "auto-remove-subtitle": "~ दिनों में डिलीट करें",
+    "show-report-dialog": "रिपोर्ट संवाद दिखाएँ",
+    "show-report-dialog-subtitle": "ऐप शुरू होने पर त्रुटि रिपोर्ट संवाद दिखाएँ"
   },
   "reader": {
     "chapters": "अध्याय",
@@ -160,13 +291,61 @@
     "release-date": "प्रकाशन तिथि",
     "genres": "शैली",
     "runtime": "रनटाइम",
-    "languages": "भाषाएं"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT सर्वर स्थापित नहीं है",
     "running": "BT सर्वर चल रहा है",
     "stopped": "BT सर्वर रुका हुआ है",
     "version": "संस्करण {version}",
+    "remote-version": "दूरस्थ संस्करण {version}",
+    "stop": "रुक जाओ",
+    "upgrade": "अपग्रेड",
     "start": "शुरू करें"
+  },
+  "report": {
+    "copied": "क्लिपबोर्ड में कॉपी किया गया",
+    "github-bug-report": "GitHub के मुद्दे पर रिपोर्ट करें",
+    "title": "बग रिपोर्ट",
+    "copy-message": "त्रुटि संदेश की कॉपी करें",
+    "show-report-checkbox": "ऐप शुरू होने पर रिपोर्ट संवाद दिखाएँ"
+  },
+  "anilist": {
+    "title": "एनिलिस्ट ट्रैकिंग",
+    "login-hint-1": "लगता है कि आपने अभी तक एनिलिस्ट में लॉग इन नहीं किया है",
+    "login-hint-2": "कृपया पहले एनिलिस्ट में लॉग इन करें",
+    "status": "स्थिति",
+    "score": "स्कोर",
+    "watching": "देख रहा है",
+    "reading": "पढ़ना",
+    "completed": "पूरा किया गया",
+    "paused": "रुका हुआ",
+    "dropped": "ड्रॉप किया गया",
+    "planning": "नियोजन",
+    "hold-on": "पकड़ो",
+    "re-watching": "फिर से देखना",
+    "re-reading": "फिर से पढ़ना",
+    "start-date": "प्रारंभ तिथि",
+    "end-date": "समाप्ति तिथि",
+    "unbind": "अनबांड",
+    "episodes": "एपिसोड",
+    "manga-chapter-read": "Manga Chapter Read: {chapters}",
+    "anime-episode-watch": "एनीम एपिसोड देखे गएः {episodes}"
+  },
+  "download": {
+    "download-manager": "डाउनलोड प्रबंधक",
+    "resume": "फिर से शुरू करें",
+    "pause": "रुकावट",
+    "cancel": "रद्द करें",
+    "downloading": "डाउनलोड करना",
+    "others": "अन्य",
+    "download-status": {
+      "queued": "कतार में",
+      "downloading": "डाउनलोड करना",
+      "completed": "पूरा किया गया",
+      "failed": "असफल रहा",
+      "paused": "रुका हुआ",
+      "canceled": "रद्द कर दिया गया"
+    }
   }
 }

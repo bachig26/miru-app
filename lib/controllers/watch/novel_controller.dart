@@ -15,6 +15,8 @@ class NovelController extends ReaderController<ExtensionFikushonWatch> {
     required super.runtime,
     required super.cover,
     required super.anilistID,
+    required super.miruDetail,
+    required super.extensionDetail,
   });
 
   // 字体大小

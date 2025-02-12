@@ -88,6 +88,8 @@
   "detail": {
     "favorite": "收藏",
     "favorited": "已收藏",
+    "download": "下载",
+    "confirm": "确认",
     "continue-watching": "繼續 {episode}",
     "total-episodes": "共 {total}",
     "overview": "簡介",

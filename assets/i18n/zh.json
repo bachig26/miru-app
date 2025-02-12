@@ -1,4 +1,20 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
     "anime": "动漫",
     "manga": "漫画",
@@ -29,6 +45,8 @@
     "save": "保存",
     "save-success": "保存成功",
     "logout": "登出",
+    "login": "登录",
+    "no-data": "没有数据",
     "clear": "清除",
     "export": "导出",
     "off": "关闭",
@@ -53,7 +71,8 @@
       "url-label": "扩展地址",
       "tips": "你可以通过链接导入扩展，或者点击下方的扩展目录，将扩展文件放入其中。",
       "extension-dir": "扩展目录",
-      "import-by-url": "通过链接导入"
+      "import-by-url": "通过链接导入",
+      "import-by-local": "本地进口"
     },
     "error-dialog": "错误信息",
     "installed": "已安装",
@@ -108,6 +127,8 @@
     "language-subtitle": "选择软件的语言",
     "extension-log": "扩展日志窗口",
     "extension-log-subtitle": "用于调试扩展",
+    "skip-interval": "跳过间隔",
+    "skip-interval-subtitle": "内置视频播放器的跳过间隔",
     "default-reader-mode": "默认漫画阅读模式",
     "network": "网络",
     "network-subtitle": "代理, User-Agent...",
@@ -127,13 +148,23 @@
     "save-log-subtitle": "自动保存日志文件",
     "export-log": "导出日志",
     "export-log-subtitle": "导出日志文件到本地",
-    "advanced": "高级"
+    "advanced": "高级",
+    "download": "下载",
+    "download-manager": "下载管理器",
+    "download-subtitle": "下载管理器设置",
+    "download-path": "下载路径",
+    "download-path-subtitle": "选择下载路径",
+    "download-path-select": "选择",
+    "download-max-task": "最大任务",
+    "download-max-task-subtitle": "最大下载任务数。为避免网络拥堵，建议设置一个合理的值"
   },
   "external-player-launching": "正在启动 {player}",
   "detail": {
     "tracking": "追踪",
     "favorite": "收藏",
     "favorited": "已收藏",
+    "download": "下载",
+    "confirm": "确认",
     "continue-watching": "继续 {episode}",
     "total-episodes": "共 {total}",
     "overview": "概览",
@@ -142,7 +173,9 @@
     "get-lastest-data-error": "获取最新数据失败",
     "modify-tmdb-binding": "修改 TMDB 绑定",
     "no-tmdb-data": "未匹配到 TMDB 数据，请自行绑定数据",
-    "tmdb-key-missing": "TMDB API Key 丢失，请前往设置填写"
+    "tmdb-key-missing": "TMDB API Key 丢失，请前往设置填写",
+    "tracker": "跟踪",
+    "selectAll": "选择所有"
   },
   "video": {
     "episodes": "剧集",
@@ -171,8 +204,7 @@
       "next": "下一个",
       "full-screen": "全屏",
       "volume": "音量",
-      "torrent-file-list": "种子文件列表",
-      "pin": "置顶窗口"
+      "torrent-file-list": "种子文件列表"
     },
     "cast": "投屏到设备",
     "cast-device": "正在 {device} 上播放",
@@ -197,16 +229,11 @@
       },
       "play-mode": {
         "title": "播放模式",
-        "single": "播完暂停",
         "loop": "循环播放",
+        "single": "播完暂停",
         "auto-next": "自动下一集"
       }
     }
-  },
-  "reader": {
-    "chapters": "章节",
-    "read-now": "立即阅读",
-    "no-chapters": "暂无章节"
   },
   "comic-settings": {
     "read-mode": "漫画阅读模式",
@@ -216,6 +243,16 @@
   },
   "novel-settings": {
     "font-size": "字体大小"
+  },
+  "bugreport": {
+    "auto-remove-subtitle": "~天内删除",
+    "show-report-dialog": "显示报告对话框",
+    "show-report-dialog-subtitle": "应用程序启动时显示错误报告对话框"
+  },
+  "reader": {
+    "chapters": "章节",
+    "read-now": "立即阅读",
+    "no-chapters": "暂无章节"
   },
   "upgrade": {
     "check-update": "检查更新",
@@ -254,7 +291,7 @@
     "release-date": "发布日期",
     "genres": "类型",
     "runtime": "时长",
-    "languages": "语言"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT-Server 未安装",
@@ -266,6 +303,13 @@
     "upgrade": "升级",
     "start": "启动"
   },
+  "report": {
+    "copied": "复制到剪贴板",
+    "github-bug-report": "向GitHub报告问题",
+    "title": "Bug报告",
+    "copy-message": "复制错误消息",
+    "show-report-checkbox": "应用程序启动时显示报告对话框"
+  },
   "anilist": {
     "title": "Anilist 追踪",
     "login-hint-1": "你需要登录 AniList 才能使用此功能",
@@ -275,6 +319,7 @@
     "watching": "观看中",
     "reading": "阅读中",
     "completed": "已完成",
+    "paused": "暂停",
     "dropped": "已放弃",
     "planning": "计划中",
     "hold-on": "搁置中",
@@ -286,5 +331,21 @@
     "episodes": "进度",
     "manga-chapter-read": "看过的漫画章节: {chapters}",
     "anime-episode-watch": "看过的动画剧集: {episodes}"
+  },
+  "download": {
+    "download-manager": "下载管理器",
+    "resume": "恢复",
+    "pause": "暂停",
+    "cancel": "取消",
+    "downloading": "下载",
+    "others": "其它",
+    "download-status": {
+      "queued": "排队中",
+      "downloading": "下载中",
+      "completed": "完成",
+      "failed": "失败",
+      "paused": "暂停",
+      "canceled": "取消"
+    }
   }
 }

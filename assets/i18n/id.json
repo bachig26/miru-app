@@ -1,4 +1,20 @@
 {
+  "languages": {
+    "be": "Беларуская",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "hu": "Magyar",
+    "hi": "हिंदी",
+    "id": "Indonesia",
+    "ja": "日本語",
+    "pl": "Polski",
+    "ru": "Русский",
+    "ryu": "うちなーぐち",
+    "uk": "Українська",
+    "zh": "中文",
+    "zhHant": "繁體中文"
+  },
   "common": {
     "anime": "Anime",
     "manga": "Manga",
@@ -55,7 +71,8 @@
       "url-label": "URL Ekstensi",
       "tips": "Kamu dapat mengimpor ekstensi melalui URL, atau mengeklik direktori ekstensi di bawah dan meletakkan file ekstensi di sana.",
       "extension-dir": "Direktori Ekstensi",
-      "import-by-url": "Impor berdasarkan URL"
+      "import-by-url": "Impor berdasarkan URL",
+      "import-by-local": "Impor secara lokal"
     },
     "error-dialog": "Pesan Kesalahan",
     "installed": "Terinstall",
@@ -131,13 +148,23 @@
     "save-log-subtitle": "Simpan file log secara otomatis",
     "export-log": "Export Log",
     "export-log-subtitle": "Ekspor log ke file",
-    "advanced": "Lanjutan"
+    "advanced": "Lanjutan",
+    "download": "Unduh",
+    "download-manager": "Download Manajer",
+    "download-subtitle": "Pengaturan Pengelola Unduhan",
+    "download-path": "Jalur Unduhan",
+    "download-path-subtitle": "Pilih jalur unduhan",
+    "download-path-select": "Pilih",
+    "download-max-task": "Tugas Maksimum",
+    "download-max-task-subtitle": "Tugas unduhan maksimum. Untuk menghindari kemacetan jaringan, disarankan untuk menetapkan nilai yang wajar"
   },
   "external-player-launching": "Menjalankan {player}",
   "detail": {
     "tracking": "Pelacakan",
     "favorite": "Favorit",
     "favorited": "Favorit",
+    "download": "Unduh",
+    "confirm": "Konfirmasi",
     "continue-watching": "Lanjutkan {episode}",
     "total-episodes": "Total {total}",
     "overview": "Ringkasan",
@@ -147,7 +174,8 @@
     "modify-tmdb-binding": "Ubah binding data TMDB",
     "no-tmdb-data": "No TMDB data matched, please bind the data yourself",
     "tmdb-key-missing": "Kunci API TMDB hilang, silakan isi pengaturannya",
-    "tracker": "Pelacak"
+    "tracker": "Pelacak",
+    "selectAll": "Pilih semua"
   },
   "video": {
     "episodes": "Episode",
@@ -263,7 +291,7 @@
     "release-date": "Tanggal Rilis",
     "genres": "Genr",
     "runtime": "Runtime",
-    "languages": "Bahasa"
+    "languages": "Languages"
   },
   "bt-server": {
     "not-installed": "BT-Server tidak diinstal",
@@ -303,5 +331,21 @@
     "episodes": "Episode",
     "manga-chapter-read": "Bacaan Bab Manga: {bab}",
     "anime-episode-watch": "Episode Anime yang Ditonton: {episodes}"
+  },
+  "download": {
+    "download-manager": "Download Manajer",
+    "resume": "Resume resume",
+    "pause": "Jeda jeda (pause)",
+    "cancel": "Pembatalan (Cancel)",
+    "downloading": "Download",
+    "others": "Lain-lain",
+    "download-status": {
+      "queued": "Dalam antrian",
+      "downloading": "Download",
+      "completed": "Selesai",
+      "failed": "gagal gagal gagal gagal",
+      "paused": "Paused (terhenti)",
+      "canceled": "dibatalkan"
+    }
   }
 }
