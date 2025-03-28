@@ -9,13 +9,18 @@ import 'package:flutter/services.dart';
 final _saf = SafStream();
 final _safUtils = SafUtil();
 
-String sanitizeFileName(String fileName) {
+String sanitizeFileName(String fileName, {bool allowSpace = false}) {
   // 移除或替换不允许的字符
   return fileName
       .replaceAll(RegExp(r'[<>:"/\\|?*]'), '') // Windows非法字符
       .replaceAll(RegExp(r'[\x00-\x1F]'), '') // 控制字符
-      .replaceAll(RegExp(r'\s+'), ' ') // 多个空格替换为单个
+      .replaceAll(RegExp(r'\s+'), allowSpace ? ' ' : '') // 空格替换
       .trim(); // 移除首尾空格
+}
+
+// 将windows风格的反斜杠替换为unix风格的正斜杠
+String normalizePath(String path) {
+  return p.normalize(path).replaceAll(r'\', '/');
 }
 
 /// 获取文件夹中所有文件的路径，并按文件名中的《数字部分》排序
@@ -185,6 +190,24 @@ Future<File> miruGetFile(String path) async {
   }
 }
 
+Future<String?> miruGetFileUri(String treeUri, String name) async {
+  if (!Platform.isAndroid) {
+    throw Exception('miruGetFileUri: not supported on this platform');
+  } else {
+    try {
+      final file = await _safUtils.child(treeUri, [name]);
+      if (file != null && !file.isDir) {
+        return file.uri.toString();
+      } else {
+        return null;
+      }
+    } catch (e) {
+      logger.warning('miruGetFileUri error: $e');
+      return null;
+    }
+  }
+}
+
 Future<bool> miruFileExist(String treePath, String fileName) async {
   final path = p.join(treePath, fileName);
   try {
@@ -205,7 +228,8 @@ Future<bool> miruFileExist(String treePath, String fileName) async {
 
 Future<String?> miruWriteFileBytes(
     String treePath, String fileName, Uint8List bytes,
-    {bool overwrite = false}) async {
+    {bool overwrite = false,
+    String fileType = 'application/octet-stream'}) async {
   final path = p.join(treePath, fileName);
   // 用于写入外部文件（特指安卓/苹果）
   if (!Platform.isAndroid) {
@@ -223,8 +247,7 @@ Future<String?> miruWriteFileBytes(
           return null;
         }
       }
-      final res = await _saf.writeFileBytes(
-          treePath, fileName, 'application/octet-stream', bytes,
+      final res = await _saf.writeFileBytes(treePath, fileName, fileType, bytes,
           overwrite: overwrite);
       return res.uri.toString();
     } catch (e) {

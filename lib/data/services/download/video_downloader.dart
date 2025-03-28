@@ -15,7 +15,7 @@ import 'package:miru_app/utils/path_utils.dart';
 class VideoDownloader extends DownloadInterface {
   // 配置最大并发数
   static const int maxConcurrentDownloads = 3;
-  
+
   late int _id;
   var _progress = 0.0;
   var _status = DownloadStatus.queued;
@@ -151,7 +151,7 @@ class VideoDownloader extends DownloadInterface {
               'Failed to create directory: ${[eps.subPath, item.subPath]}');
           return DownloadStatus.failed;
         }
-
+        String? mediaPath;
         try {
           final (playlistUrl, segments) =
               await _getM3U8Segments(watchData.url, watchData.headers ?? {});
@@ -188,9 +188,10 @@ class VideoDownloader extends DownloadInterface {
           buffer.writeln('#EXT-X-VERSION:3');
           buffer.writeln('#EXT-X-TARGETDURATION:${maxDuration.inSeconds}');
           buffer.writeln('#EXT-X-MEDIA-SEQUENCE:0');
+          final existFiles = await miruListFolderFilesName(curPath);
 
           for (var (index, segment) in segments.indexed) {
-            if (await miruFileExist(curPath, '$index.ts')) {
+            if (existFiles.contains('$index.ts')) {
               final segmentDuration =
                   Duration(microseconds: segment.durationUs ?? 0);
               buffer.writeln(
@@ -200,11 +201,11 @@ class VideoDownloader extends DownloadInterface {
           }
 
           buffer.writeln('#EXT-X-ENDLIST');
-          await miruWriteFileBytes(
-              curPath,
-              '${item.title}.m3u8',
-              Uint8List.fromList(buffer.toString().codeUnits)
-          );
+          mediaPath = await miruWriteFileBytes(curPath, '${item.title}.m3u8',
+              Uint8List.fromList(buffer.toString().codeUnits), overwrite: true);
+          if (mediaPath != null) {
+            mediaPath = await miruGetActualPath(mediaPath);
+          }
         } catch (e) {
           logger.warning('Failed to process playlist: ${watchData.url}', e);
           return DownloadStatus.failed;
@@ -214,8 +215,9 @@ class VideoDownloader extends DownloadInterface {
         final itemTitle = item.title;
         final offlineResource = _detail?.offlineResource ?? {};
         offlineResource[epTitle] ??= {};
-        offlineResource[epTitle]![itemTitle] = curPath;
-        if (_detail != null) {
+        offlineResource[epTitle]![itemTitle] = mediaPath ?? '';
+        logger.info('Downloaded: $epTitle - $itemTitle, path: $mediaPath');
+        if (_detail != null && mediaPath != null) {
           _detail!.offlineResource = offlineResource;
           await DatabaseService.updateMiruDetail(
               detailPackage!, detailUrl!, _detail!);
@@ -320,10 +322,11 @@ class VideoDownloader extends DownloadInterface {
           _activeDownloads.remove('$index');
           rethrow;
         }
-        
+
         retryCount++;
         if (retryCount >= 5) {
-          logger.warning('Failed to download segment after 5 retries: $segmentUri', e);
+          logger.warning(
+              'Failed to download segment after 5 retries: $segmentUri', e);
           break;
         }
         logger.info('Retry $retryCount for segment: $segmentUri');
@@ -343,6 +346,7 @@ class VideoDownloader extends DownloadInterface {
     required Function(Duration) onSegmentDuration,
   }) async {
     var downloadedCount = 0;
+    final existFiles = await miruListFolderFilesName(curPath);
 
     for (var i = 0; i < segments.length; i += maxConcurrentDownloads) {
       // 检查是否取消
@@ -368,7 +372,7 @@ class VideoDownloader extends DownloadInterface {
         final fileName = '$segmentIndex.ts';
 
         // 检查文件是否已存在
-        if (await miruFileExist(curPath, fileName)) {
+        if (existFiles.contains(fileName)) {
           logger.info('Segment already exists: $fileName');
           downloadedCount++;
           onProgress(downloadedCount);
@@ -402,7 +406,7 @@ class VideoDownloader extends DownloadInterface {
     }
     _status = DownloadStatus.canceled;
     _job.status = _status;
-    
+
     // 取消所有活动的下载
     for (final cancelToken in _activeDownloads.values) {
       cancelToken.cancel('Download canceled');

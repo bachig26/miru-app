@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:get/get.dart';
+import 'package:miru_app/animations/navigation_animation.dart';
 import 'package:miru_app/views/widgets/platform_widget.dart';
 import 'package:miru_app/views/widgets/settings/settings_tile.dart';
 
@@ -61,14 +62,14 @@ class SettingsExpanderTile extends StatelessWidget {
       title: title,
       buildSubtitle: () => subTitle,
       onTap: () {
-        Get.to(
-          () => Scaffold(
-            appBar: AppBar(
-              title: Text(title),
+        NavigationAnimation.roundedGetTo(
+            page: Scaffold(
+              appBar: AppBar(
+                title: Text(title),
+              ),
+              body: content,
             ),
-            body: content,
-          ),
-        );
+            transition: Transition.rightToLeft);
       },
     );
   }

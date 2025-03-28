@@ -241,10 +241,36 @@ class _AndroidMainPageState extends fluent.State<AndroidMainPage> {
                     selectedIndex: c.selectedTab.value,
                     onDestinationSelected: c.changeTab,
                   ),
-                  Expanded(child: pages[c.selectedTab.value])
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      child: KeyedSubtree(
+                        key: ValueKey<int>(c.selectedTab.value),
+                        child: pages[c.selectedTab.value],
+                      ),
+                    ),
+                  )
                 ],
               )
-            : pages[c.selectedTab.value],
+            : AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: KeyedSubtree(
+                  key: ValueKey<int>(c.selectedTab.value),
+                  child: pages[c.selectedTab.value],
+                ),
+              ),
         bottomNavigationBar: LayoutUtils.isTablet
             ? null
             : NavigationBar(

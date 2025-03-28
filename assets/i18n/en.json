@@ -51,7 +51,8 @@
     "export": "Export",
     "off": "Off",
     "error-message": "Error message",
-    "disconnect": "Disconnect"
+    "disconnect": "Disconnect",
+    "continue": "Continue"
   },
   "home": {
     "continue-watching": "Continue",
@@ -104,6 +105,7 @@
     "repo-url-subtitle": "Get the repository URL for extensions",
     "tmdb-key": "TMDB API Key",
     "tmdb-key-subtitle": "Get API Key for TMDB metadata",
+    "file-access-permission": "File Access Permission",
     "bt-server": "BT Server",
     "bt-server-subtitle": "BT Server is a necessary component for online playback of torrent",
     "bt-server-manager": "Manage",
@@ -178,6 +180,7 @@
     "selectAll": "Select All"
   },
   "video": {
+    "offline-permission": "To play offline videos, Miru needs permission to access files on your device. You can manage this permission in {permission_setting_path}. \nIf you prefer not to grant this permission, you can choose to use an external video player instead by changing the default player settings in {preferred_video_path}. Please note that external players may have compatibility issues.",
     "episodes": "Episodes",
     "watch-now": "Watch Now",
     "no-episodes": "No episodes",

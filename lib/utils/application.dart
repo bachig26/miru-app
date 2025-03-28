@@ -40,7 +40,7 @@ class ApplicationUtils {
   static checkUpdate(BuildContext context, {bool showSnackbar = false}) async {
     try {
       const url =
-          "https://api.github.com/repos/miru-project/miru-app/releases/latest";
+          "https://api.github.com/repos/Mancrop/mancrop-miru/releases/latest";
       final res = await dio.get(url);
       final remoteVersion =
           (res.data["tag_name"] as String).replaceFirst('v', '');

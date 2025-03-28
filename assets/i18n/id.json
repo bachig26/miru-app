@@ -51,7 +51,8 @@
     "export": "Ekspor",
     "off": "Off",
     "error-message": "Pesan Kesalahan",
-    "disconnect": "Terputus"
+    "disconnect": "Terputus",
+    "continue": "Lanjutkan"
   },
   "home": {
     "continue-watching": "Lanjutkan",
@@ -104,6 +105,7 @@
     "repo-url-subtitle": "Dapatkan URL repositori untuk ekstensi",
     "tmdb-key": "TMDB API Key",
     "tmdb-key-subtitle": "Dapatkan API key untuk metadata TMDB",
+    "file-access-permission": "Izin akses file",
     "bt-server": "BT Server",
     "bt-server-subtitle": "BT Server adalah komponen penting untuk pemutaran torrent onlinet",
     "bt-server-manager": "Manage",
@@ -178,6 +180,7 @@
     "selectAll": "Pilih semua"
   },
   "video": {
+    "offline-permission": "Untuk memutar video offline, Miru memerlukan izin untuk mengakses file di perangkat Anda. Anda dapat mengelola izin ini di {permission_setting_path}. \nJika Anda lebih memilih untuk tidak memberikan izin ini, Anda dapat memilih untuk menggunakan pemutar video eksternal sebagai gantinya dengan mengubah pengaturan pemutar default di {preferred_video_path} . Harap dicatat bahwa pemain eksternal mungkin memiliki masalah kompatibilitas.",
     "episodes": "Episode",
     "watch-now": "Tonton Sekarang",
     "no-episodes": "Tidak ada episode",

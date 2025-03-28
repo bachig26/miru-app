@@ -11,6 +11,7 @@ class SettingsTile extends StatefulWidget {
     this.buildSubtitle,
     this.onTap,
     this.isCard = false,
+    this.radius = const BorderRadius.all(Radius.circular(6.0)),
   });
   final Widget? icon;
   final String title;
@@ -18,6 +19,7 @@ class SettingsTile extends StatefulWidget {
   final Function()? onTap;
   final Widget? trailing;
   final bool isCard;
+  final BorderRadius radius;
 
   @override
   State<SettingsTile> createState() => _SettingsTileState();
@@ -25,14 +27,74 @@ class SettingsTile extends StatefulWidget {
 
 class _SettingsTileState extends State<SettingsTile> {
   Widget _buildAndroid(BuildContext context) {
-    return ListTile(
-      leading: widget.icon,
-      title: Text(widget.title),
-      subtitle: widget.buildSubtitle != null
-          ? Text(widget.buildSubtitle!.call())
-          : null,
-      trailing: widget.trailing,
-      onTap: widget.onTap,
+    final content = Row(
+      children: [
+        if (widget.icon != null) ...[
+          IconTheme(
+            data: IconThemeData(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            child: widget.icon!,
+          ),
+          const SizedBox(width: 16),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.title,
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              ),
+              if (widget.buildSubtitle != null)
+                Text(
+                  widget.buildSubtitle!.call(),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withAlpha(150)),
+                ),
+            ],
+          ),
+        ),
+        if (widget.trailing != null) widget.trailing!,
+      ],
+    );
+
+    if (widget.isCard) {
+      return TextButton(
+        style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: widget.radius,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          backgroundColor:
+              Theme.of(context).colorScheme.primaryContainer.withAlpha(50),
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+        ),
+        onPressed: widget.onTap,
+        child: content,
+      );
+    }
+
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: widget.radius,
+        ),
+      ),
+      onPressed: widget.onTap,
+      child: content,
     );
   }
 

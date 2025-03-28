@@ -51,7 +51,8 @@
     "export": "Exportation",
     "off": "Off",
     "error-message": "Message d'erreur",
-    "disconnect": "Déconnexion"
+    "disconnect": "Déconnexion",
+    "continue": "Continuer"
   },
   "home": {
     "continue-watching": "Reprendre",
@@ -104,6 +105,7 @@
     "repo-url-subtitle": "Obtenir l'URL du Dépôt d'Extensions",
     "tmdb-key": "Clé API TMDB",
     "tmdb-key-subtitle": "Obtenir la clé API TMDB",
+    "file-access-permission": "Permission d'accès au fichier",
     "bt-server": "Serveur BT",
     "bt-server-subtitle": "Le serveur BT est un composant nécessaire à la lecture en ligne des torrents.",
     "bt-server-manager": "Gérer",
@@ -178,6 +180,7 @@
     "selectAll": "Sélectionnez tous"
   },
   "video": {
+    "offline-permission": "Pour lire des vidéos hors ligne, Miru a besoin d'une autorisation pour accéder aux fichiers sur votre appareil. Vous pouvez gérer cette autorisation dans {permission_setting_path}. \nSi vous préférez ne pas accorder cette autorisation, vous pouvez choisir d'utiliser un lecteur vidéo externe à la place en modifiant les paramètres par défaut du lecteur dans {preferred_video_path} . Veuillez noter que les joueurs externes peuvent avoir des problèmes de compatibilité.",
     "episodes": "Episodes",
     "watch-now": "Regarder Maintenant",
     "no-episodes": "Aucun episode",

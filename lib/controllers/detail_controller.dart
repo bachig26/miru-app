@@ -8,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:get/get.dart';
+import 'package:miru_app/animations/navigation_animation.dart';
 import 'package:miru_app/data/providers/tmdb_provider.dart';
 import 'package:miru_app/data/services/offline_resource_service.dart';
 import 'package:miru_app/models/index.dart';
+import 'package:miru_app/utils/android_permission.dart';
+import 'package:miru_app/utils/log.dart';
+import 'package:miru_app/utils/path_utils.dart';
+import 'package:miru_app/views/dialogs/alert_dialog.dart';
 import 'package:miru_app/views/dialogs/tmdb_binding.dart';
 import 'package:miru_app/controllers/home_controller.dart';
 import 'package:miru_app/controllers/main_controller.dart';
@@ -379,6 +384,17 @@ class DetailPageController extends GetxController {
 
     if (type == ExtensionType.bangumi) {
       final player = MiruStorage.getSetting(SettingKey.videoPlayer);
+      String? epTitle;
+      String? itemTitle;
+      String? itemPath;
+
+      try {
+        epTitle = detail!.episodes?[selectEpGroup].title;
+        itemTitle = detail!.episodes?[selectEpGroup].urls[index].name;
+        itemPath = _miruDetail!.offlineResource[epTitle]?[itemTitle];
+      } catch (_) {
+        itemPath = null;
+      }
 
       if (player != 'built-in') {
         showPlatformSnackbar(
@@ -393,8 +409,25 @@ class DetailPageController extends GetxController {
         );
         late ExtensionBangumiWatch watchData;
         try {
-          watchData = await runtime.value!.watch(urls[index].url)
-              as ExtensionBangumiWatch;
+          if (itemPath != null) {
+            late String uri;
+            if (Platform.isAndroid) {
+              uri = player == 'vlc' ? Uri.file(itemPath).toString() : itemPath;
+            } else {
+              uri = normalizePath(itemPath);
+            }
+            logger.info('Detail Controller uri: $uri');
+            // 构造 watchData
+            watchData = ExtensionBangumiWatch(
+              type: ExtensionWatchBangumiType.local,
+              url: uri,
+              headers: {},
+              subtitles: [],
+            );
+          } else {
+            watchData = await runtime.value!.watch(urls[index].url)
+                as ExtensionBangumiWatch;
+          }
         } catch (e) {
           showPlatformSnackbar(
             context: currentContext,
@@ -418,39 +451,78 @@ class DetailPageController extends GetxController {
             severity: fluent.InfoBarSeverity.error,
           );
         }
+      } else if (itemPath != null) {
+        var isSuccess = await isFullStoragePermissionGranted();
+        // 此时需要请求权限
+        if (!await isFullStoragePermissionGranted()) {
+          isSuccess = await showCustomAlertDialog(
+              context: currentContext,
+              message: FlutterI18n.translate(
+                  currentContext, 'video.offline-permission',
+                  translationParams: {
+                    'permission_setting_path':
+                        '[${'settings.general'.i18n}->${'settings.file-access-permission'.i18n}]',
+                    'preferred_video_path':
+                        '[${'settings.video-player'.i18n}->${'settings.external-player'.i18n}]',
+                  }),
+              callback: () async {
+                final success = await requestFullStoragePermissions();
+                return success;
+              });
+        }
+        if (!isSuccess) {
+          return;
+        }
       }
     }
 
-    Navigator.of(context, rootNavigator: true).push(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: ((context, animation, secondaryAnimation) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.ease,
+    if (Platform.isAndroid) {
+      NavigationAnimation.roundedGetTo(
+          page: WatchPage(
+            cover: detail!.cover,
+            playList: urls,
+            package: package,
+            playerIndex: index,
+            title: detail!.title,
+            episodeGroupId: selectEpGroup,
+            detailUrl: url,
+            anilistID: aniListID.value,
+            detail: _miruDetail!,
+            extensionDetail: detail!,
+          ),
+          transition: Transition.downToUp);
+    } else {
+      Navigator.of(context, rootNavigator: true).push(
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 600),
+          pageBuilder: ((context, animation, secondaryAnimation) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.ease,
+                ),
               ),
-            ),
-            child: WatchPage(
-              cover: detail!.cover,
-              playList: urls,
-              package: package,
-              playerIndex: index,
-              title: detail!.title,
-              episodeGroupId: selectEpGroup,
-              detailUrl: url,
-              anilistID: aniListID.value,
-              detail: _miruDetail!,
-              extensionDetail: detail!,
-            ),
-          );
-        }),
-      ),
-    );
+              child: WatchPage(
+                cover: detail!.cover,
+                playList: urls,
+                package: package,
+                playerIndex: index,
+                title: detail!.title,
+                episodeGroupId: selectEpGroup,
+                detailUrl: url,
+                anilistID: aniListID.value,
+                detail: _miruDetail!,
+                extensionDetail: detail!,
+              ),
+            );
+          }),
+        ),
+      );
+    }
   }
 
   changeDownloadSelectorState() {
@@ -459,11 +531,11 @@ class DetailPageController extends GetxController {
 
   download(List<int> selected) {
     if (type == ExtensionType.manga) {
-          OfflineResourceService.startMangaDownloadJob(
-        package, url, detail!, selectEpGroup.value, selected);
+      OfflineResourceService.startMangaDownloadJob(
+          package, url, detail!, selectEpGroup.value, selected);
     } else if (type == ExtensionType.bangumi) {
       OfflineResourceService.startAnimeDownloadJob(
-        package, url, detail!, selectEpGroup.value, selected);
+          package, url, detail!, selectEpGroup.value, selected);
     } else if (type == ExtensionType.fikushon) {
       throw UnimplementedError();
     } else {

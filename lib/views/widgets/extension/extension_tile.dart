@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:miru_app/models/extension.dart';
+import 'package:miru_app/animations/navigation_animation.dart';
 import 'package:miru_app/views/pages/code_edit_page.dart';
 import 'package:miru_app/views/pages/extension/extension_settings_page.dart';
 import 'package:miru_app/router/router.dart';
@@ -42,7 +43,10 @@ class _ExtensionTileState extends State<ExtensionTile> {
         style: const TextStyle(fontSize: 12),
       ),
       onTap: () {
-        Get.to(() => ExtensionSettingsPage(package: widget.extension.package));
+        NavigationAnimation.roundedGetTo(
+          page: ExtensionSettingsPage(package: widget.extension.package),
+          transition: Transition.rightToLeft,
+        );
       },
       trailing: IconButton(
         onPressed: () {

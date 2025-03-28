@@ -56,7 +56,7 @@ class OfflineResourceService {
         resource.url = url;
         resource.title = details.title;
         resource.cover = details.cover;
-        resource.path = await newDirectory('$package ${details.title}', ResourceType.video);
+        resource.path = await newDirectory('$package-${details.title}', ResourceType.video);
         final episodes = details.episodes ?? [];
         final curEp = episodes[ep];
         final epInstance = Ep()

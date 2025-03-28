@@ -51,7 +51,8 @@
     "export": "导出",
     "off": "关闭",
     "error-message": "错误信息",
-    "disconnect": "断开连接"
+    "disconnect": "断开连接",
+    "continue": "继续"
   },
   "home": {
     "continue-watching": "继续观看",
@@ -104,6 +105,7 @@
     "repo-url-subtitle": "获取扩展的仓库地址",
     "tmdb-key": "TMDB API Key",
     "tmdb-key-subtitle": "获取 TMDB 元数据的 API Key",
+    "file-access-permission": "文件访问许可",
     "bt-server": "BT Server",
     "bt-server-subtitle": "在线播放 BT 种子的必要组件",
     "bt-server-manager": "管理",
@@ -178,6 +180,7 @@
     "selectAll": "选择所有"
   },
   "video": {
+    "offline-permission": "要播放离线视频，Miru需要访问您设备上的文件的权限。您可以在 {permission_setting_path} 中管理此权限. \n如果您不想授予此权限，则可以通过更改中的默认播放器设置来选择使用外部视频播放器 {preferred_video_path} .请注意，外部播放器可能存在兼容性问题。",
     "episodes": "剧集",
     "watch-now": "立即观看",
     "no-episodes": "暂无剧集",

@@ -51,7 +51,8 @@
     "export": "輸出",
     "off": "オフ",
     "error-message": "エラーメッセージ",
-    "disconnect": "コネクト解除"
+    "disconnect": "コネクト解除",
+    "continue": "続行"
   },
   "home": {
     "continue-watching": "続ける",
@@ -104,6 +105,7 @@
     "repo-url-subtitle": "拡張機能リポジトリのURLを取得する",
     "tmdb-key": "TMDB APIキー",
     "tmdb-key-subtitle": "TMDBメタデータのAPIキーを取得する",
+    "file-access-permission": "ファイルアクセス許可",
     "bt-server": "BTサーバー",
     "bt-server-subtitle": "BTサーバーは、BTシードのオンライン再生に必要なコンポーネントです",
     "bt-server-manager": "マネージャー",
@@ -178,6 +180,7 @@
     "selectAll": "すべて選択"
   },
   "video": {
+    "offline-permission": "オフラインビデオを再生するには、 Miru はデバイス上のファイルにアクセスする権限が必要です。この許可は {permission_setting_path}. \nこのパーミッションを付与しない場合は、デフォルトのプレーヤーの設定を変更することで、代わりに外部ビデオプレーヤーを使用することができます。 {preferred_video_path} .外部プレーヤーには互換性の問題がある場合があります。",
     "episodes": "エピソード",
     "watch-now": "今すぐ視聴する",
     "no-episodes": "エピソードがありません",
